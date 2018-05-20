@@ -5,12 +5,9 @@
 			<form class="form form-horizontal selected-user-form" method="POST" action="" enctype="multipart/form-data" id="operator_add_patient">
 
 				<!-- Заголовок модального окна -->
-				<div class="modal-header">
+				<div class="modal-header" id="patientModalDatasHeader">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 					<h4 class="modal-title selected_PacientModalBoxTitle">Пациент: ФИО</h4>
-				</div>
-				<!-- Основное содержимое модального окна -->
-				<div class="modal-body user-selected-modal-body">
 					<ul class="nav nav-tabs user_tabs">
 						<li class="active" id="basic"><a href="#" onclick="ShowUser_Data('basic-information');">Основные сведения</a></li>
 						<li><a href="#" id="" onclick="ShowUser_Data('contacts');">Контакты</a></li>
@@ -20,6 +17,10 @@
 						<li><a href="#" id="" onclick="ShowUser_Data('patient_historty_visit');">История посещения</a></li>
 						<button type="button" class="btn btn-primary pull-right" id="zapicat" onclick="RedirectForRecord()">Записать</button>
 					</ul>
+				</div>
+				<!-- Основное содержимое модального окна -->
+				<div class="modal-body user-selected-modal-body">
+
 
 					<div id="basic-information">
 						<div class="form-group addPlaceholder">
@@ -73,7 +74,7 @@
 						<div class="form-group addPlaceholder">
 							<label for="selected-user-patient_card_num" class="col-xs-2 control-label">№ амбулаторной карты</label>
 							<div class="col-xs-10">
-								<input type="text" name="patient_card_num" class="form-control" id="selected-user-patient_card_num" required>
+								<input type="text" name="patient_card_num" class="form-control" id="selected-user-patient_card_num" required readonly="readonly">
 							</div>
 						</div>
 						<div class="form-group addPlaceholder">
@@ -248,7 +249,8 @@
 
 				<!-- Футер модального окна -->
 				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+					<button type="button" name="remove-patient-button" id="remove-patient-button" class="btn btn-danger remove-pacient" onclick="RemovePatientFromDB(this)" data-id="ва">Удалить</button>
 					<input type="submit" name="submit" class="btn btn-primary add-new-pacient" value="Добавить">
 					<input type="submit" name="update_patient_data" class="btn btn-primary" id="save-user-selected-info" value="Сохранить изменения" onclick="UpdateUserData()">
 				</div>

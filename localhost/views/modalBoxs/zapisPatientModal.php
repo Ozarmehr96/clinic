@@ -35,7 +35,7 @@
 						<div class="form-group">
 							<label for="pacientpassportnumber" class="">Номер паспорта</label>
 							<div class="input-group date">
-								<input type="text" name="passportNum" class="form-control" id="pacientpassportnumber" placeholder="Номер паспорта">
+								<input type="text" name="passportNum" class="form-control" id="pacientpassportnumber" placeholder="Номер паспорта" required="required">
 								<span class="input-group-addon">
                                     <span class="glyphicon">№</span>
 								</span>
@@ -56,14 +56,15 @@
 					<div class="form-group">
 						<label for="patient-fio" class="col-xs-12 control-label" id="patient-fio-label">ФИО</label>
 						<div class="col-xs-12 input-group" id="fullnamePatient">
-							<input type="text" class="form-control" name="patient-fio" placeholder="ФИО" id="patient-fio" readonly>
+							<input type="text" class="form-control" name="patient-fio" placeholder="ФИО" id="patient-fio" data-id="" readonly>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="uslugi">Услуги</label>
 						<div class="col-xs-12 input-group">
-							<select class="form-control" name="uslugi" id="uslugi">
+							<select class="form-control" name="uslugi" id="uslugi" required>
+                               <option value="" >Не выбрано</option>
                                 <?php foreach ($uslugi as $val): ?>
                                     <option value="<?php echo $val['id']; ?>"><?php echo $val['name']; ?></option>
                                 <?php endforeach; ?>
@@ -90,6 +91,7 @@
 					<input type="hidden" name="recordPatientCheck" id="datasForSendRecord">
 					<input type="hidden" name="doctorID" id="doctorID">
 					<input type="hidden" name="patientID" id="patientID">
+					<input type="hidden" name="articul" id="articul-for-add">
 					<input type="submit" class="btn btn-info" id="recorePatient" value="Записать">
 
 				</div>

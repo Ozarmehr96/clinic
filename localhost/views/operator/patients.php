@@ -29,21 +29,24 @@
 				</div>
 			</div>
 			<div class="col-xs-3">
-				<label for="inn">Номер полиса</label>
-				<input type="text" class="form-control" id="police_number" data-placement="bottom" data-toggle="tooltip" title="Номер медицинского полиса пациента (ОМС, ДМС)" placeholder="Номер полиса">
-
+				<label for="passport">Номер паспорта</label>
+				<input type="text" class="form-control" placeholder="№ документа, удостверяещего личность" id="passport">
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-3">
-				<label for="passport">Номер паспорта</label>
-				<input type="text" class="form-control" placeholder="№ документа, удостверяещего личность" id="passport">
+				<label for="inn">Номер полиса</label>
+				<input type="text" class="form-control" id="police_number" data-placement="top" data-toggle="tooltip" title="Номер медицинского полиса пациента (ОМС, ДМС)" placeholder="Номер полиса">
 			</div>
 			<div class="col-xs-3">
-				<label for="medicine-cart-number">Номер карты</label>
+				<label for="medicine-cart-number">Номер мед. карты</label>
 				<input type="text" class="form-control" id="medicine-cart-number" data-toggle="tooltip" title="Номер медицинской карты пациента" placeholder="Номер карты">
 			</div>
-			<div class="col-xs-3">
+			<div class="col-xs-1">
+				<br>
+				<input type="checkbox" class="form-control" id="exactMatchCheckBox" data-toggle="tooltip" title="Точное совпадение ФИО">
+			</div>
+			<div class="col-xs-2">
 				<label for="search" style="color:#ffffff;">&#160</label>
 				<button type="button" id="search" class="form-control btn btn-primary col-xs-3" onclick="SearchPatients()">
 						Поиск   <span class="glyphicon glyphicon-search"></span> 
@@ -64,9 +67,9 @@
 					<th>ФИО</th>
 					<th>Пол</th>
 					<th>Дата рождения</th>
-					<th>ИИН</th>
 					<th>№ паспорта</th>
-					<th>№ амб. карты</th>
+					<th>№ полиса</th>
+					<th>№ мед. карты</th>
 				</tr>
 			</thead>
 			<tbody id="search_table_body">
@@ -83,6 +86,14 @@
 	<form method="post" action="/operator/register-journal" class="forAddingNewform">
 	</form>
 </div>
+
+
+<div class="text-center">
+	<!-- Button HTML (to Trigger Modal) -->
+	<a href="#" id="op">Click to Open Confirm Modal</a>
+</div>
 <?php include_once(ROOT."/views/modalBoxs/userSelectedModal.php");?>
+<?php include_once(ROOT."/views/modalBoxs/ConfirmModals/RemoveModal.php");?>
+<?php include_once(ROOT."/views/modalBoxs/ConfirmModals/WarrningModal.php");?>
 
 <?php include_once(ROOT."/views/layouts/footer.php");?>

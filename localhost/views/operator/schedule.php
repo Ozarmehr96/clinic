@@ -1,6 +1,6 @@
 <?php include_once(ROOT."/views/layouts/header.php");?>
 <!-- 	РАСПИСАНИЕ -->
-<div class="container" id="schedule">
+<div class="container-fluid" id="schedule">
 	<h4>Предварительная запись на прием</h4>
 	<form class="form" method="post">
 		<div class="form-group row">
@@ -15,8 +15,7 @@
 						<th>Услуга</th>
 						<th>Стоимость</th>
 						<th>Заметки</th>
-						<th>Изменить</th>
-						<th>Удалить</th>
+						<th>Действие</th>
 					</tr>
 				</thead>
 
@@ -40,14 +39,16 @@
 					<td>
 						<?php echo $this->getUsligiByID($zapic['id_uslugi']); ?>
 					</td>
-                                                        <td>
+					<td>
 						<?php echo $zapic['cost']; ?>
 					</td>
-					<td>
+					<td width="120px">
 						<?php echo $zapic['notes']; ?>
 					</td>
-					<td data-id="<?php echo $zapic['id_schedule']; ?>"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></td>
-					<td data-id="<?php echo $zapic['id_schedule']; ?>"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
+					<td class="optionTD">
+						<span class="glyphicon glyphicon-edit" aria-hidden="true" style="color:#ffc107" data-id_schedule="<?php echo $zapic['id_schedule']; ?>" data-doctor_id="<?php echo $zapic['id_doctor']; ?>" data-patient_id="<?php echo $zapic['id_pacient']; ?>" onclick="UpdateRecordedPatient(this)"></span>&emsp;
+						<span class="glyphicon glyphicon-remove-circle" aria-hidden="true" onclick="RemoveZapicById(this)" data-id="<?php echo $zapic['id_schedule']; ?>" style="color:red"></span>
+					</td>
 				</tr>
 				<?php endforeach;?>
 			</table>
@@ -55,6 +56,7 @@
 	</form>
 </div>
 <?php include_once(ROOT."/views/modalBoxs/userSelectedModal.php");?>
-<?php include_once(ROOT."/views/modalBoxs/userSelectedUpdateModal.php");?>
-
+<?php include_once(ROOT."/views/modalBoxs/ConfirmModals/RemoveModal.php");?>
+<?php include_once(ROOT."/views/modalBoxs/UpdateZapicModal.php");?>
+<?php include_once(ROOT."/views/modalBoxs/ConfirmModals/WarrningModal.php");?>
 <?php include_once(ROOT."/views/layouts/footer.php");?>

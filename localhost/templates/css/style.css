@@ -1,77 +1,77 @@
 /* make sidebar nav vertical */
 
 @media (min-width: 768px) {
-	.sidebar-nav .navbar .navbar-collapse {
-		padding: 0;
-		max-height: none;
-	}
-	.sidebar-nav .navbar ul {
-		float: none;
-		display: block;
-	}
-	.sidebar-nav .navbar li:hover {
-		background-color: #01579b;
-		color: white;
-	}
-	.sidebar-nav .navbar li>a:hover {
-		color: white;
-	}
-	.sidebar-nav .navbar li {
-		float: none;
-		display: block;
-	}
-	.sidebar-nav .navbar li a {
-		padding-top: 12px;
-		padding-bottom: 12px;
-	}
-	.navbar-default .navbar-nav>.active>a,
-	.navbar-default .navbar-nav>.active>a:hover,
-	.navbar-default .navbar-nav>.active>a:focus {
-		background-color: #01579b;
-		color: white;
-	}
+    .sidebar-nav .navbar .navbar-collapse {
+        padding: 0;
+        max-height: none;
+    }
+    .sidebar-nav .navbar ul {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li:hover {
+        background-color: #01579b;
+        color: white;
+    }
+    .sidebar-nav .navbar li>a:hover {
+        color: white;
+    }
+    .sidebar-nav .navbar li {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li a {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+    .navbar-default .navbar-nav>.active>a,
+    .navbar-default .navbar-nav>.active>a:hover,
+    .navbar-default .navbar-nav>.active>a:focus {
+        background-color: #01579b;
+        color: white;
+    }
 }
 
 .head-bar {
-	background-color: #01579b;
-	color: white;
+    background-color: #01579b;
+    color: white;
 }
 
 .text-right {
-	text-align: right;
+    text-align: right;
 }
 
 #removeIdPatientFromUlLi {
-	padding-left: 10px;
-	color: red;
+    padding-left: 10px;
+    color: red;
 }
 
 .IdPatientFromUlLi {
-	background-color: inherit;
+    background-color: inherit;
 }
 
 #idSelectedPatientFromSearch {
-	color: black;
+    color: black;
 }
 
 #patient-fio,
 #datetimepickerZapicDataPriema,
 #nachaloPriema {
-	background-color: inherit;
+    background-color: inherit;
 }
 
 #notes {
-	resize: none;
-	overflow-y: scroll;
+    resize: none;
+    overflow-y: scroll;
 }
 
 
 /* рабочее место, для отступа название страницы с рабочим контентом, то есть левый меню и правый, отступ сверху*/
 
 .navbar-default {
-	border-top-color: #01579b;
-	border-top-left-radius: 0px;
-	border-top-right-radius: 0px;
+    border-top-color: #01579b;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
 
 #education,
@@ -80,134 +80,259 @@
 #insurance-policy,
 #patient_historty_visit,
 #contacts {
-	display: none;
-	padding-top: 15px;
+    display: none;
+    padding-top: 15px;
 }
 
 #basic-information {
-	padding-top: 15px;
+    padding-top: 15px;
 }
 
 #selectedPacientModalBox .modal-dialog {
-	width: 80%;
+    width: 80%;
 }
 
 .datetimepicker-input {
-	padding-right: 15px;
-	padding-left: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 .modal-dialog {
-	overflow-y: initial !important
+    overflow-y: initial !important
 }
 
 .modal-body {
-	height: 440px;
-	overflow-y: auto;
+    /*height: 440px;*/
+    overflow-y: auto;
 }
 
 .selected-user-form {
-	padding-top: 10px;
+    padding-top: 10px;
 }
 
 .navbar,
 .navbar-default {
-	margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 #payed {
-	max-height: 20;
-	width: 20px;
+    max-height: 20;
+    width: 20px;
 }
 
 .cd-accordion-menu input[type=checkbox] {
-	position: absolute;
-	opacity: 0;
+    position: absolute;
+    opacity: 0;
 }
 
 .cd-accordion-menu label,
 .cd-accordion-menu a {
-	position: relative;
-	display: block;
-	padding: 18px 18px 18px 64px;
-	background: #4d5158;
-	box-shadow: inset 0 -1px #555960;
-	color: #ffffff;
-	font-size: 1.6rem;
+    position: relative;
+    display: block;
+    padding: 18px 18px 18px 64px;
+    background: #4d5158;
+    box-shadow: inset 0 -1px #555960;
+    color: #ffffff;
+    font-size: 1.6rem;
 }
 
 .cd-accordion-menu ul {
-	display: none;
+    display: none;
 }
 
 .cd-accordion-menu input[type=checkbox]:checked+label+ul,
 .cd-accordion-menu input[type=checkbox]:checked+label:nth-of-type(n)+ul {
-	display: block;
+    display: block;
 }
 
 .nav-pills>li.active>a,
 .nav-pills>li.active>a:hover {
-	background-color: #01579b;
-	color: white;
+    background-color: #01579b;
+    color: white;
 }
 
 .menu-second-level {
-	padding-left: 20px;
+    padding-left: 20px;
 }
 
 .menu-second-level li>a:hover {
-	background-color: #2d74ab;
-	color: white;
+    background-color: #2d74ab;
+    color: white;
 }
 
 .menu-second-level>li.active-second-level>a,
 .active-second-level {
-	color: white;
-	background: #2d74ab;
+    color: white;
+    background: #2d74ab;
 }
 
 #changeSelectedPacientData,
 #save-user-selected-info,
 #add-new-pacient {
-	display: none;
+    display: none;
+}
+
+#selected-user-patient_card_num {}
+
+
+/*****************************			Столбец действие		********************************/
+
+.optionTD {
+    padding: 0px;
+    text-align: center;
+    font-size: 20px;
+    width: 84px;
+}
+
+.table>tbody>tr>#actionTD {
+    padding: 0px;
+}
+
+.table>tbody>tr>.optionTD>.glyphicon {
+    top: 7px;
 }
 
 .block-this-element {
-	display: block;
+    display: block;
 }
 
 .doctor-schedule-content {
-	height: 450px;
-	overflow-y: scroll;
+    height: 450px;
+    overflow-y: scroll;
 }
 
 .office {
-	background-color: #efefef;
+    background-color: #efefef;
 }
 
 td {
-	text-align: center;
-	word-wrap: normal;
+    text-align: center;
+    word-wrap: normal;
 }
 
 .user-page-container {
-	padding-top: 15px;
+    padding-top: 15px;
 }
 
 .addPlaceholder {}
 
 #enter_content {
-	position: absolute;
-	margin: auto;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	width: 450px;
-	height: 400px;
-	border-radius: 3px;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 450px;
+    height: 400px;
+    border-radius: 3px;
 }
 
 #zapicat {
-	display: none;
+    display: none;
+}
+
+#patientModalDatasHeader {
+    border-bottom-color: white;
+    padding-bottom: 0px;
+}
+
+.user-selected-modal-body {
+    height: 440px;
+    padding-top: 0px;
+}
+
+.user_tabs {
+    padding-top: 10px;
+}
+
+#selectedPacientModalBox {
+    top: -10px;
+}
+
+#exactMatchCheckBox {
+    height: 34px;
+    width: 34px;
+}
+
+#schedule {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.loader {
+    margin: 100px auto;
+    font-size: 25px;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    position: relative;
+    text-indent: -9999em;
+    -webkit-animation: load5 1.1s infinite ease;
+    animation: load5 1.1s infinite ease;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+@-webkit-keyframes load5 {
+    0%,
+    100% {
+        box-shadow: 0em -2.6em 0em 0em #808080, 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2), 2.5em 0em 0 0em rgba(128, 128, 128, 0.2), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.2), 0em 2.5em 0 0em rgba(128, 128, 128, 0.2), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.2), -2.6em 0em 0 0em rgba(128, 128, 128, 0.5), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.7);
+    }
+    12.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.7), 1.8em -1.8em 0 0em #808080, 2.5em 0em 0 0em rgba(128, 128, 128, 0.2), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.2), 0em 2.5em 0 0em rgba(128, 128, 128, 0.2), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.2), -2.6em 0em 0 0em rgba(128, 128, 128, 0.2), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.5);
+    }
+    25% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.5), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.7), 2.5em 0em 0 0em #808080, 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.2), 0em 2.5em 0 0em rgba(128, 128, 128, 0.2), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.2), -2.6em 0em 0 0em rgba(128, 128, 128, 0.2), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2);
+    }
+    37.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.2), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.5), 2.5em 0em 0 0em rgba(128, 128, 128, 0.7), 1.75em 1.75em 0 0em #808080, 0em 2.5em 0 0em rgba(128, 128, 128, 0.2), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.2), -2.6em 0em 0 0em rgba(128, 128, 128, 0.2), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2);
+    }
+    50% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.2), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2), 2.5em 0em 0 0em rgba(128, 128, 128, 0.5), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.7), 0em 2.5em 0 0em #808080, -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.2), -2.6em 0em 0 0em rgba(128, 128, 128, 0.2), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2);
+    }
+    62.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.2), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2), 2.5em 0em 0 0em rgba(128, 128, 128, 0.2), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.5), 0em 2.5em 0 0em rgba(128, 128, 128, 0.7), -1.8em 1.8em 0 0em #808080, -2.6em 0em 0 0em rgba(128, 128, 128, 0.2), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2);
+    }
+    75% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.2), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2), 2.5em 0em 0 0em rgba(128, 128, 128, 0.2), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.2), 0em 2.5em 0 0em rgba(128, 128, 128, 0.5), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.7), -2.6em 0em 0 0em #808080, -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2);
+    }
+    87.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.2), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2), 2.5em 0em 0 0em rgba(128, 128, 128, 0.2), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.2), 0em 2.5em 0 0em rgba(128, 128, 128, 0.2), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.5), -2.6em 0em 0 0em rgba(128, 128, 128, 0.7), -1.8em -1.8em 0 0em #808080;
+    }
+}
+
+@keyframes load5 {
+    0%,
+    100% {
+        box-shadow: 0em -2.6em 0em 0em #808080, 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2), 2.5em 0em 0 0em rgba(128, 128, 128, 0.2), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.2), 0em 2.5em 0 0em rgba(128, 128, 128, 0.2), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.2), -2.6em 0em 0 0em rgba(128, 128, 128, 0.5), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.7);
+    }
+    12.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.7), 1.8em -1.8em 0 0em #808080, 2.5em 0em 0 0em rgba(128, 128, 128, 0.2), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.2), 0em 2.5em 0 0em rgba(128, 128, 128, 0.2), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.2), -2.6em 0em 0 0em rgba(128, 128, 128, 0.2), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.5);
+    }
+    25% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.5), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.7), 2.5em 0em 0 0em #808080, 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.2), 0em 2.5em 0 0em rgba(128, 128, 128, 0.2), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.2), -2.6em 0em 0 0em rgba(128, 128, 128, 0.2), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2);
+    }
+    37.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.2), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.5), 2.5em 0em 0 0em rgba(128, 128, 128, 0.7), 1.75em 1.75em 0 0em #808080, 0em 2.5em 0 0em rgba(128, 128, 128, 0.2), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.2), -2.6em 0em 0 0em rgba(128, 128, 128, 0.2), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2);
+    }
+    50% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.2), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2), 2.5em 0em 0 0em rgba(128, 128, 128, 0.5), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.7), 0em 2.5em 0 0em #808080, -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.2), -2.6em 0em 0 0em rgba(128, 128, 128, 0.2), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2);
+    }
+    62.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.2), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2), 2.5em 0em 0 0em rgba(128, 128, 128, 0.2), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.5), 0em 2.5em 0 0em rgba(128, 128, 128, 0.7), -1.8em 1.8em 0 0em #808080, -2.6em 0em 0 0em rgba(128, 128, 128, 0.2), -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2);
+    }
+    75% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.2), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2), 2.5em 0em 0 0em rgba(128, 128, 128, 0.2), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.2), 0em 2.5em 0 0em rgba(128, 128, 128, 0.5), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.7), -2.6em 0em 0 0em #808080, -1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2);
+    }
+    87.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(128, 128, 128, 0.2), 1.8em -1.8em 0 0em rgba(128, 128, 128, 0.2), 2.5em 0em 0 0em rgba(128, 128, 128, 0.2), 1.75em 1.75em 0 0em rgba(128, 128, 128, 0.2), 0em 2.5em 0 0em rgba(128, 128, 128, 0.2), -1.8em 1.8em 0 0em rgba(128, 128, 128, 0.5), -2.6em 0em 0 0em rgba(128, 128, 128, 0.7), -1.8em -1.8em 0 0em #808080;
+    }
+}
+
+.center {
+    padding: 90px 0;
+    border: 3px solid green;
+    text-align: center;
 }

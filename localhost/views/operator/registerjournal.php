@@ -14,23 +14,42 @@
 				</div>
 			</div>
 			<ul class="nav nav-pills nav-stacked office">
-				<?php $i = 0; foreach ($officces as $key=>$val):?>
-				<?php $i++; $index = $i; ?>
+				<?php $nextID = null; $prevID = null; $currentId = null; $i = 0; foreach ($officces as $key=>$val):?>
+
+				<?php $currentId = $officces[$key]['id_special']; 
+                                                $i++; $index = $i; 
+                                                $fio = $val['name']." ".$val['surname']." ".$val['patronymic'];
+                                                if (isset($officces[$key+1]['id_special']))
+                                                {
+                                                    $nextID = $officces[$key+1]['id_special'];
+                                                }
+                                                if (isset($officces[$key-1]['id_special']))
+                                                {
+                                                    $prevID = $officces[$key-1]['id_special'];
+                                                }
+                                            ?>
+				<?php if ($currentId != $prevID):?>
 				<li class="active" data-toggle="collapse" data-target="#demo<?php echo $index; ?>">
 					<a href="#">
-						<?php echo $val['title']; ?>
+						<?php echo $val['title'];  ?>
 					</a>
 				</li>
 				<li>
 					<ul class="nav menu-second-level collapse" id="demo<?php echo $index; ?>">
-						<li class="doctor-pills-name" data-id="<?php echo$val['id']; ?>" onclick="ShowDoctorSchedule(this)">
+						<?php foreach ($officces as $inner_key => $innerVal): ?>
+						<?php if ($innerVal['id_special'] == $currentId): ?>
+						<li class="doctor-pills-name" data-id="<?php echo $innerVal['id_pacient']; ?>" onclick="ShowDoctorSchedule(this)">
 							<a>
-								<?php echo $val['name']." ".$val['surname']." ".$val['patronymic']; ?>
+								<?php echo "ID: ".$innerVal['id_pacient']." ".$innerVal['name']." ".$innerVal['surname']." ".$innerVal['patronymic']; ?>
 							</a>
 						</li>
+						<?php endif;   ?>
+						<?php endforeach;?>
 					</ul>
 				</li>
-				<?php endforeach; ?>
+				<?php else: continue; ?>
+				<?php endif;   ?>
+				<?php  endforeach;  ?>
 			</ul>
 		</div>
 		<div class="col-md-9 doctor-schedule-content">
@@ -41,6 +60,8 @@
 							<tr>
 								<th>Время</th>
 								<th>ФИО пациента</th>
+								<th>Заметки</th>
+								<th width="84px">Действие</th>
 							</tr>
 						</thead>
 						<tr data-id="12" id="" data-name="table3">
@@ -53,6 +74,13 @@
 		</div>
 	</div>
 </div>
+<div>
+	<form method="post" action="/operator/register-journal" class="forAddingNewform">
+	</form>
+</div>
 <?php include_once(ROOT."/views/modalBoxs/zapisPatientModal.php");?>
 <?php include_once(ROOT."/views/modalBoxs/userSelectedModal.php");?>
+<?php include_once(ROOT."/views/modalBoxs/ConfirmModals/RemoveModal.php");?>
+<?php include_once(ROOT."/views/modalBoxs/ConfirmModals/WarrningModal.php");?>
+<?php include_once(ROOT."/views/modalBoxs/UpdateZapicModal.php");?>
 <?php include_once(ROOT."/views/layouts/footer.php");?>

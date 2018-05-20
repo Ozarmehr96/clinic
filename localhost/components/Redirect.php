@@ -29,7 +29,11 @@ class Redirect {
             $userId = $_SESSION['user_id'];
             $getUser = Patient::getPatientByID($userId);
             $result = $getUser['count(*)'];
-            if ($result != 1)
+            if ($_SERVER['REQUEST_METHOD'] === 'POST')
+            {
+                
+            } else {
+                if ($result != 1)
             {
                 header("Location: /");
                 exit();
@@ -40,7 +44,9 @@ class Redirect {
                 echo "<h4>Доступ запрещен!</h4>";
                 exit();
             }
+            }
             
+
         }
         else
         {
@@ -60,7 +66,7 @@ class Redirect {
     public function SetSessionAndRedirect($user_id, $user_type)
     {
        
-      session_unset();
+       session_unset();
        $_SESSION['user_id'] = $user_id;
        $_SESSION['user_type'] = $user_type;
        $this->CheckUsertypeAndRedirect($_SESSION['user_type']);

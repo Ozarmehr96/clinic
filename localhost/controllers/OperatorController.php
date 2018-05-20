@@ -1,5 +1,4 @@
 <?php
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -14,6 +13,7 @@
 class OperatorController extends Redirect {
     
     public function __construct() {
+        
         parent::__construct("operator");
        // print_r($_SESSION);
         return true;
@@ -24,7 +24,18 @@ class OperatorController extends Redirect {
         $schedule = array();
         $schedule = Operator::getSchedule();
         
+        if(isset($_POST['removeScheduleById']))
+        {
+            $schedule_id = $_POST['schedule_id'];
+            $result = Operator::RemoveZapisById($schedule_id);
+            if ($result != NULL)
+            {
+                return $result;
+            }
+            return;
+        }
         require_once ROOT.'/views/operator/schedule.php';
+        //echo '<script>OpenWarningModal("Ошибка", "Доктор уже занят в указанное время");</script>';
         return TRUE;
     }
     
@@ -63,7 +74,8 @@ class OperatorController extends Redirect {
             $result = Operator::addPatient($values);
             if ($result != NULL)
             {
-               echo '<br><h1>Seccess! Patient added!<h1>'.$result;
+                header("Location: /operator/patients");
+                exit();
             }
         }
         
@@ -73,6 +85,24 @@ class OperatorController extends Redirect {
     }
     
     /**
+     * Метод удалениепациента
+     */
+    public function actionRemovePatient()
+    {
+        $patient_id = "";
+        if (isset($_POST['removepatient']))
+        {
+            $patient_id = $_POST['id'];
+            $result = Operator::RemovePatientById($patient_id);
+            if ($result != NULL)
+            {
+                 header("Location: /operator/patients");
+                exit();
+            }
+        }
+    }
+
+        /**
      * Изменение данных выбранного пациента
      * @param type $id_patient
      * @return boolean
@@ -112,19 +142,26 @@ class OperatorController extends Redirect {
             $result = Operator::UpdatePatientData($values);
             if ($result != NULL)
             {
-                header("Location: /operator");
+                 header("Location: /operator/patients");
                 exit();
             }
+            else
+            {
+                echo "Что-то пошло не так. <br> Результат запроса: ".$result;
+            }
+            
         }
-        
-        
-        //header("Location: /");
-        //require ROOT.'/views/patient/updateOrChange.php';
         return TRUE;
     }
     
     public function actionPatients()
     {
+        if(isset($_POST['getMaxPatientId']))
+        {
+            $maxIdFromPatientTable = Operator::getMaxIDFromPatientTable();
+            echo $maxIdFromPatientTable;
+            return;
+        }
         if(isset($_POST['id']))
         {
             $patient_id = $_POST['id'];
@@ -133,6 +170,9 @@ class OperatorController extends Redirect {
             echo json_encode($patient);
             return;
         }
+        /**
+         *  Поиск пациентов
+         */
         if(isset($_POST['search']))
         {
             $values = array();
@@ -141,7 +181,7 @@ class OperatorController extends Redirect {
             $values['patronymic'] = htmlspecialchars($_POST['patronymic']);
             $values['date_of_birth'] = htmlspecialchars($_POST['date_of_birth']);
             $values['passport_num'] = htmlspecialchars($_POST['passport_num']);
-            $values['inn'] = htmlspecialchars($_POST['inn']);
+            $values['police_number'] = htmlspecialchars($_POST['police_number']);
             $values['patient_card_num'] = htmlspecialchars($_POST['patient_card_num']);
             
             $searchResult = array();
@@ -151,41 +191,55 @@ class OperatorController extends Redirect {
             foreach ($searchResult as $val)
             {
                 $i++;
-                
-                $surname =  $val['surname'];
-                  $patronymic     =$val['patronymic'];
-               $fio = $val['surname']." ". $val['name']." ".$val['patronymic'];
+                $surname = $val['surname'];
+                $patronymic = $val['patronymic'];
+                $fio = $val['surname']." ". $val['name']." ".$val['patronymic'];
                 echo '<tr data-id="'.$val['id_pacient'].'" data-zapicat="true" class="open-modal-pacient-data pacientSearchTable" onclick="ShowUserDatasOnModal(this)">'
                         . '<td>'.$i.'</td>'
-                        . '<td class="pacientFIO" id="pacientFIO">'.$fio.'</td>'
+                        . '<td class="pacientFIO" id="pacientFIO" nowrap>'.$fio.'</td>'
                         . '<td>'.Patient::ConvertToSex($val['sex']).'</td>'
                         . '<td>'.$val['date_of_birth'].'</td>'
-                        . '<td>'.$val['inn'].'</td>'
+                        
                         . '<td>'.$val['passport_num'].'</td>'
+                        . '<td>'.$val['police_number'].'</td>'
                         . '<td>'.$val['patient_card_num'].'</td>'
                         . '</tr>';
             }
             //echo json_encode($teg);
             return;
         }
+        
+        if (isset($_POST['seachByParams']))
+        {
+            $val = $_POST['val'];
+            $param = $_POST['param'];
+            $db = $_POST['db'];
+            //$param = 'passport_num';
+            $result = Operator::SearchUserByParamsReturnRowCount($db,$param, $val);
+            echo $result;
+            return;
+        }
+        
+        
         require ROOT.'/views/operator/patients.php';
         return TRUE;
     }
 
      /**
-     * Запись пациента, журнал регистрации пациентов
-     * @return boolean
-     */
+      * Запись пациента, журнал регистрации пациентов
+      * @return boolean
+      */
     public function actionRegisterJournal(){
         
         $officces = array();
         $officces = Operator::getDoctorsOfficces();
+        //print_r($officces);
         $uslugi = array();
         $uslugi = Operator::getUslugi();
         //print_r($officces);
         $doctorSchedule = array();
-        $doctorSchedule = Operator::getDoctorSchedule("1","2018-04-16");
-        //print_r($doctorSchedule);
+        $doctorSchedule = Operator::getDoctorSchedule("8","2018-05-15");
+       // print_r($doctorSchedule);
         $time1 = new DateTime();
         $TimesInArray = $this->TimesInArray(15);
         
@@ -195,7 +249,7 @@ class OperatorController extends Redirect {
             $id_doctor = $_POST['id_doctor'];
 
             $doctorSchedule = array();
-            $doctorSchedule = Operator::getDoctorSchedule($id_doctor, $date);
+            $doctorSchedule = Operator::getDoctorSchedule($id_doctor,$date);
             $res = "";
            
             
@@ -205,8 +259,10 @@ class OperatorController extends Redirect {
                     for ($j = 0; $j < 60; $j += 15) {
                         $time = new DateTime();
                         $time->setTime($i, $j, 00);
-                        echo '<tr>'
-                        . '<td  id="timeZapic" onclick="ZapicPatient(this)" data-id="">' . $time->format('H:i:s') . '</td>'
+                        echo '<tr id="timeZapic" onclick="ZapicPatient(this)" data-id="">'
+                        . '<td>' . $time->format('H:i:s') . '</td>'
+                        . '<td data-id=""></td>'
+                        . '<td data-id=""></td>'
                         . '<td data-id=""></td>'
                         . '</tr>';
                     }
@@ -216,25 +272,44 @@ class OperatorController extends Redirect {
             {
                 $fioPatient = "";
                 $patient_id = "";
+                $notess = "";
+                
                 foreach ($TimesInArray as $keyofTimes => $valOfTimes) {
+                    $notess = "";
+                    $option = '<td data-id=""></td>';
                     foreach ($doctorSchedule as $valofDoctorSchedule) {
                         $fioPatient = $valofDoctorSchedule['surname']." ".$valofDoctorSchedule['name']." ".$valofDoctorSchedule['patronymic'];
                         // если тек. время == время записи пациента
                         if ($valofDoctorSchedule['time_priema'] == $keyofTimes) {
                             $valOfTimes = '<td onclick = "ShowUserDatasOnModal(this)" data-id="' . $valofDoctorSchedule['id_pacient'] . '">' . $fioPatient. '</td>';
                             $patient_id = $valofDoctorSchedule['id_pacient'];
+                            $notess = $valofDoctorSchedule['notes'];
+                            $option = '<td class="optionTD" id = "actionTD">'
+                                        . '<span class="glyphicon glyphicon-edit" aria-hidden="true" style="color:#ffc107" onclick="UpdateRecordedPatient(this)" data-patient_id="'.$valofDoctorSchedule['id_pacient'].'" data-doctor_id="'.$valofDoctorSchedule['id_doctor'].'" data-id_schedule="'.$valofDoctorSchedule['id_schedule'].'" ></span>&emsp;'
+                                        . '<span class="glyphicon glyphicon-remove-circle" aria-hidden="true" onclick="RemoveZapicById(this)" data-id="'.$valofDoctorSchedule['id_schedule'].'" style="color:red"></span>'
+                                    . '</td>';
                         }
-                        
                     }
+                    
+                    
+                    /*
+                     *  data-id_schedule="$zapic['id_schedule']" 
+                     * data-doctor_id="$zapic['id_doctor']" 
+                     * data-patient_id="$zapic['id_pacient']" 
+                     */
                     if ($valOfTimes == "") $valOfTimes = '<td data-id=""></td>';
+                     $notes = '<td data-id="">'.$notess.'</td>';
                     $timePriem = '<td id="timeZapic" onclick="ZapicPatient(this)" data-id="'.$patient_id.'">' . $keyofTimes . '</td>';
                     //if ($valOfTimes == "") $valOfTimes = $timePriem;
                     //$TimesInArray[$keyofTimes] = $valOfTimes;  // хранить в тек. время ФИО пользователя
                    //echo $keyofTimes . "=>" . $valOfTimes . "<br>";
+                    
                     echo '<tr>'
                             . $timePriem
-                            .  $valOfTimes. '</tr>';
-                    
+                            . $valOfTimes
+                            . $notes
+                            . $option
+                         .'</tr>';
                 }
             }
             return;
@@ -251,11 +326,46 @@ class OperatorController extends Redirect {
      */
     public function actionRegisterJournalRecord()
     {
+        /**
+         *  Проверяем, свободен ли доктор в указанное время
+         */
+        if (isset($_POST['seachisfreedoctor']))
+        {
+            $date = $_POST['date'];
+            $time = $_POST['time'];
+            $doctorID = $_POST['iddoctor'];
+            $result = Operator::CheckIsFreeDoctorBeforeRecordPatient($date,$time,$doctorID);
+            if($result != NULL)
+            {
+                echo $result;
+                exit();
+            }
+            return;
+ 
+        }
+        /**
+         * Метод проверяет, не записан ли пациент или же 
+         * не записывается ли повторно к одному и тому же доктору в одно время
+         */
+        if (isset($_POST['checkisnotrecordedpatient'])) {
+            $articul = $_POST['articul'];
+            $result = Operator::CheckIsNotRecordedPatientBeforeInsert($articul);
+            if ($result != NULL) {
+                echo $result;
+                exit();
+            }
+            return;
+        }
+        
+        /**
+         * Метод выбора пациента с помощью пасспорта или номер мед.карты
+         */
         if (isset($_POST['getUserByPassportAndMedCart'])) {
             $medicineCartNum = $_POST['medicineCartNum'];
             $passportNum = $_POST['passportNum'];
             $val = array();
             $val = Patient::getPatientByPassportAndMedicineCart($passportNum, $medicineCartNum);
+            
             echo json_encode($val);
             return;
         }
@@ -271,18 +381,90 @@ class OperatorController extends Redirect {
             $recordDatas['addedUserId'] = "1";
             $recordDatas['doctorID'] = $_POST['doctorID'];
             $recordDatas['patientID'] = $_POST['patientID'];
+            $recordDatas['articul'] = $_POST['articul'];
            
             $result = Operator::PatientRecord($recordDatas);
-            /*if ($result != NULL)
+           if ($result != NULL)
             {
                 header("Location: /operator/register-journal");
-            }*/
-            echo $result;
+                exit();
+            }
+            return true;
+         /*foreach ($recordDatas as $key=>$value)
+         {
+             echo $key."=>".$value."<br>";
+         }*/
             
            
         }
     }
-
+    
+    public function actionRegisterJournalRecordUpdate()
+    {
+        if (isset($_POST['getScheduleById']))
+        {
+            $scheduleID = $_POST['scheduleID'];
+            $scheduleGet = Operator::getScheduleByID($scheduleID);
+            echo json_encode($scheduleGet);
+            return;
+        }
+        
+        if (isset($_POST['fillDoctorBySpeciality'])) {
+            $special_id = $_POST['speciality_id'];
+            echo $this->FillSelectionOptiontWithDoctorBySpeciality($special_id);
+            return;
+        }
+        
+        if (isset($_POST['filldoctorwithtimes'])) 
+        {
+            $date = $_POST['date'];
+            $doctorId = $_POST['id_doctor'];
+            //echo $this->FillSelectOptionsWithDoctorTimeWork($doctorId, $date);
+            echo $this->FillSelectOptionsWithDoctorTimeWork($doctorId, $date);
+            return;
+        }
+        
+        
+        if (isset($_POST['checkisfreedoctorupdate'])) 
+        {
+            $date = $_POST['date'];
+            $time = $_POST['time'];
+            $doctorID = $_POST['iddoctor'];
+            $patientID = $_POST['idpatient'];
+            $result = Operator::CheckIsDoctorFreeBeforeUpdateRecordedPatient($date, $time, $doctorID, $patientID);
+           //$result2 = Operator::CheckIsPatientNotFreeBeforeUpdateRecordedPatient($date, $time, $doctorID, $patientID);
+            echo $result;
+            return;
+        }
+        
+        if (isset($_POST['updateRecordedPat']))
+        {
+            $recordUpdateDatas = array();
+            $recordUpdateDatas['updatedatetimepickerZapicDataPriema'] = $_POST['updatedatetimepickerZapicDataPriema'];
+            $recordUpdateDatas['uslugi'] = $_POST['uslugi'];
+            $recordUpdateDatas['updatenachaloPriema'] = $_POST['updatenachaloPriema'];
+            $recordUpdateDatas['updatecost'] = $_POST['updatecost'];
+            $recordUpdateDatas['update-notes'] = $_POST['update-notes'];
+            $recordUpdateDatas['addedUserId'] = "1";
+            $recordUpdateDatas['update-doctorID'] = $_POST['update-doctorID'];
+            $recordUpdateDatas['update-articul'] = $_POST['update-articul'];
+            $recordUpdateDatas['scheduleID'] = $_POST['scheduleID'];
+           
+            $result = Operator::UpdateRecordOfPatient($recordUpdateDatas);
+           if ($result != NULL)
+            {
+                header("Location: /operator");
+                exit();
+            }
+            return true;
+         /*echo $result;
+         foreach ($recordUpdateDatas as $key=>$val)
+         {
+             echo $key."->".$val."<br>";
+         }*/
+        }
+         
+    }
     /**
      * Добавление класс active для меню
      * @param type $name
@@ -295,7 +477,9 @@ class OperatorController extends Redirect {
         $uri = explode('/', $uri);
         $lastElemOfArray = array_pop($uri);
         //if ($lastElemOfArray === $name) echo 'active';
-        if (preg_match("~^$name$~", $lastElemOfArray)) echo 'active';
+        $string = preg_replace('/\s+/', '', $name); // Убираем все пробелы
+        if (preg_match("~^$string~", $lastElemOfArray)) echo 'active';
+        
     }
     
     
@@ -371,4 +555,74 @@ class OperatorController extends Redirect {
         $fio = $operator['surname']." ".$operator['name']." ".$operator['patronymic'];
         return $fio;
     }
+    
+    /**
+     * Метод заполнения выпадающего списка данными
+     * Вызавается метод таким образом Название класса::Название метода() OperatorController::FullSelectOptions($dbname,$title,$id)
+     * @param type $dbname
+     * @param type $title
+     * @param type $id
+     */
+    public static function FullSelectOptions($dbname,$title,$id)
+    {
+        $optionsValues = Operator::getDatasForFillSelectOptions($dbname,$title,$id);
+        //echo '<option value="">Не выбрано</option>';
+        foreach ($optionsValues as $key => $val)
+        {
+           echo '<option value="'.$val['id'].'">'.$val['title'].'</option>';
+        } 
+    }
+    
+    /**
+     * Метод заполнения выпадающего списка 
+     * Выбираются доктора в зависимости от специализации
+     * @param type $specialID id специализаци
+     */
+    public static function FillSelectionOptiontWithDoctorBySpeciality($specialID)
+    {
+        $optionsValues = Operator::getDoctorsBySpeciality($specialID);
+        echo '<option value="">Не выбрано</option>';
+        foreach ($optionsValues as $key => $val)
+        {
+           //$speciality_id = 'data-speciality_id="'.$val['id_special'].'"';
+           echo '<option value="'.$val['id_doctor'].'">'.$val['fio'].'</option>';
+        } 
+    }
+    
+    
+    public static function FillSelectOptionsWithDoctorTimeWork($id_doctor,$date)
+    {
+        $doctorDatas = array();
+        $doctorDatas = Operator::getDoctorSchedule($id_doctor, $date);
+        $TimesInArray = OperatorController::TimesInArray(15);
+        if ($doctorDatas == NULL) {
+            echo '<option value="">Не выбрано</option>';
+            for ($i = 8; $i < 18; $i++) {
+                for ($j = 0; $j < 60; $j += 15) {
+                    $time = new DateTime();
+                    $time->setTime($i, $j, 00);
+                    echo '<option>' . $time->format('H:i:s') . '</option>';
+                }
+            }
+        } else {
+            echo '<option value="">Не выбрано</option>';
+            foreach ($TimesInArray as $keyofTimes => $valOfTimes) {
+                $arrayOf = array();
+                foreach ($doctorDatas as $valofDoctorSchedule) {
+                    // если тек. время == время записи пациента
+                    if ($valofDoctorSchedule['time_priema'] == $keyofTimes) { // Если есть запись и время приема != тек.время в массиве
+                        $arrayOf[$keyofTimes] = ""; // создадим массив для хранения времени когда он занят
+                    } else {
+                        continue;
+                    }
+                }
+                
+                if (!array_key_exists($keyofTimes, $arrayOf)) { // если не занят то выводим, то есть если индекс $TimesInArray!= индекс $arrayOf
+                    echo '<option>' . $keyofTimes . '</option>';
+                }
+            }
+        }
+        return TRUE;
+    }
+
 }

@@ -38,10 +38,16 @@ class Router {
     public function run(){
         // Получить строку запроса
         $uri = $this->getUri();
-
+        if($uri === 'user/logout' )
+        {
+            session_destroy();
+            header("Location: /");
+        }
+        
       // Проверить наличие такого запроса в router.php ($this->routes)
       foreach ($this->routes as $uriPattern => $path)
       {
+         
           
           if(preg_match("~^$uriPattern$~", $uri))
           {
@@ -79,9 +85,9 @@ class Router {
               if($result != null) // если все ок
               {
                   break;        // выйти из цикла
-              }
+              }  
           }
-         
+          
       }
     
     }
