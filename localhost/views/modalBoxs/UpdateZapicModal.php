@@ -10,7 +10,7 @@
 					<h4 class="modal-title" id="updaterecordPacientModalTitle">Редактирование записи</h4>
 				</div>
 				<div class="modal-body record-pacient-modal-body">
-					<div class="col-xs-12" id="">
+					<div class="col-xs-12" id="patFIOcol-xs">
 						<div class="form-group">
 							<label for="updatefullnamePatient" class="">Выбранный пациент</label>
 							<div class="input-group">

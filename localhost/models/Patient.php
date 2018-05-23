@@ -65,7 +65,7 @@ class Patient {
         
         $sql = "SELECT id_pacient, name, sex, surname, patronymic, date_of_birth, police_number,passport_num,patient_card_num FROM patient WHERE user_type = $user_type and name LIKE '%$name%'"
                 . " OR user_type = $user_type and surname LIKE '%$surname%' OR user_type = $user_type and patronymic LIKE '%$patronymic%'  OR user_type = $user_type and date_of_birth "
-                . "LIKE '%$date_of_birth%' OR user_type = $user_type and police_number = $police_number OR passport_num=$passport_num OR user_type = $user_type and patient_card_num=$patient_card_num ";
+                . "LIKE '%$date_of_birth%' OR user_type = $user_type and police_number = '$police_number' OR passport_num='$passport_num' OR user_type = $user_type and patient_card_num=$patient_card_num ";
         $result = $connection->query($sql);
         $i = 0;
         while ($row = $result->fetch())
@@ -129,6 +129,31 @@ class Patient {
             $i++;
         }
         return $recordList;
+    }
+    
+    public static function RecordZapis($values)
+    {
+        $connection = Db::getConnection();
+        $sql = "INSERT INTO schedule (id_add_user, date_priema,time_priema, id_doctor, id_pacient, id_uslugi, cost, notes, articul) "
+                    . "VALUES (:id_add_user, :date_priema, :time_priema, :id_doctor, :id_pacient, :id_uslugi, :cost, :notes, :articul) "
+                    . " ON DUPLICATE KEY UPDATE articul=articul";
+
+            $result = $connection->prepare($sql);
+
+            $result->bindParam(":id_add_user", $values['addedUserId']);
+            $result->bindParam(":date_priema", $values['updatedatetimepickerZapicDataPriema']);
+            $result->bindParam(":time_priema", $values['updatenachaloPriema']);
+            $result->bindParam(":id_doctor", $values['update-doctorID']);
+            $result->bindParam(":id_pacient", $values['patientID']);
+            $result->bindParam(":id_uslugi", $values['uslugi']);
+            $result->bindParam(":cost", $values['updatecost']);
+            $result->bindParam(":notes", $values['update-notes']);
+            $result->bindParam(":articul", $values['update-articul']);
+            $result->execute();
+            if ($result->execute()) {
+                $last_id = $connection->lastInsertId();
+                return $last_id;
+            }
     }
 }
 

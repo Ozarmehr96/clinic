@@ -13,6 +13,7 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/templates/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/templates/css/bootstrap-datetimepicker.min.css" />
     <link href="/templates/css/bootstrap.css" rel="stylesheet">
     <link href="/templates/css/style.css" rel="stylesheet">
@@ -30,9 +31,12 @@
 </head>
 
 <body>
+    <?php include_once(ROOT."/views/layouts/main_head.php");?>
     <div class="container-fluid head-bar">
         <div class="container">
-            <h3>Оператор: ФИО</h3>
+            <h4>Оператор:
+                <?php echo OperatorController::getOperatorByID(Redirect::getUserIDFromSession()); ?>
+            </h4>
         </div>
     </div>
     <nav class="navbar navbar-default">
@@ -43,9 +47,13 @@
                     <li class="<?php $this->AddClassActiveForMenu(" operator "); ?>"><a href="/operator"><span>Расписание</span></a></li>
                     <li class="<?php $this->AddClassActiveForMenu(" patients "); ?>"><a href="/operator/patients" id="">Пациеты</a></li>
                     <li class="<?php $this->AddClassActiveForMenu(" register-journal "); ?>"><a href="/operator/register-journal">Журнал регистрации пациентов</a></li>
+                    <li class="<?php $this->AddClassActiveForMenu(" doctor-shedule "); ?>"><a href="/operator/doctor-shedule">Расписание работы врача</a></li>
 
                 </ul>
-                <li><a href="/user/logout">Выход</a></li>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/user/logout"><span class="glyphicon glyphicon-log-in"></span> Выход</a></li>
+                </ul>
+
                 <!-- Выводит ФИО пациента, если с другой страницы был отправлен ID-->
                 <?php $this->SetUserDataOnUlIfExists(); ?>
             </div>

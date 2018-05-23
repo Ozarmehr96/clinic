@@ -32,6 +32,27 @@
     }
 }
 
+.inline-headers {
+    vertical-align: baseline;
+}
+
+.inline-headers h3 i {
+    display: inline-flex;
+    vertical-align: baseline;
+}
+
+.active-tr,
+.active-tr:hover,
+.active-tr:focus {
+    background-color: #4f92ff;
+    color: white;
+}
+
+.table-striped tbody tr.highlight td {
+    background-color: #4f92ff;
+    color: white;
+}
+
 .head-bar {
     background-color: #01579b;
     color: white;
@@ -112,7 +133,7 @@
 
 .navbar,
 .navbar-default {
-    margin-bottom: 5px;
+    margin-bottom: 0px;
 }
 
 #payed {
@@ -149,6 +170,8 @@
 .nav-pills>li.active>a:hover {
     background-color: #01579b;
     color: white;
+    border-bottom-color: aliceblue;
+    border-top-color: black;
 }
 
 .menu-second-level {
@@ -158,12 +181,17 @@
 .menu-second-level li>a:hover {
     background-color: #2d74ab;
     color: white;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background: #2d74ab;
 }
 
 .menu-second-level>li.active-second-level>a,
 .active-second-level {
     color: white;
     background: #2d74ab;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 #changeSelectedPacientData,
@@ -335,4 +363,90 @@ td {
     padding: 90px 0;
     border: 3px solid green;
     text-align: center;
+}
+
+.add-overflow-x {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+#infoBrand {
+    margin: 5px auto;
+    display: block;
+    text-decoration: none;
+    color: black;
+}
+
+#refreshIcon {
+    display: inline-flex;
+    float: right;
+}
+
+#refreshIcon:hover {
+    color: #4f92ff;
+}
+
+.canClick:hover {
+    color: white;
+    background: #01579b;
+    cursor: pointer;
+    /*#0061ff*/
+}
+
+.highlight:hover>.canClick:hover {
+    color: white;
+    background: #01579b;
+    cursor: pointer;
+    /*#0061ff*/
+}
+
+.alert-div {
+    position: fixed;
+    bottom: 0;
+    top: 96px;
+    right: 20px;
+    z-index: 999;
+}
+
+#readMoreEye {
+    font-size: 18px;
+}
+
+#readMoreEye:hover {
+    color: red;
+}
+
+#modal-contentdoctorScheduleModalBox {
+    width: 750px;
+    margin: auto;
 }

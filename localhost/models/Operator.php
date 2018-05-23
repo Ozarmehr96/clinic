@@ -198,7 +198,10 @@ class Operator {
     {
        $connection = Db::getConnection();
         $sql = "SELECT specialities.id_special, patient.id_pacient, patient.name, patient.surname, patient.patronymic, specialities.title "
-                . "FROM patient JOIN specialities ON specialities.id_special = patient.id_special ORDER BY id_special";
+                . " FROM patient "
+                . " JOIN doctor ON patient.id_pacient = doctor.id_doctor "
+                . " JOIN specialities ON specialities.id_special = doctor.id_special "
+                . " ORDER BY id_special";
         $result = $connection->query($sql);
         $i = 0;
         $values = array();
@@ -223,10 +226,10 @@ class Operator {
     public static function getDoctorSchedule($id_doctor, $date) {
         $connection = Db::getConnection();
 
-        $sql = "SELECT name, surname, patronymic, time_priema, date_priema, notes, schedule.id_pacient, schedule.id_doctor,schedule.id_schedule FROM schedule JOIN patient "
-                . "ON patient.id_pacient = schedule.id_pacient WHERE date_priema = :date_priema and schedule.id_doctor = :id_doctor ORDER BY time_priema";
-        // $sql = "SELECT time_priema,date_priema,notes,id_pacient FROM schedule "
-        //        . "WHERE date_priema = :date_priema and id_doctor = :id_doctor ORDER BY time_priema";
+        $sql = "SELECT name, surname, patronymic, time_priema, date_priema, notes, schedule.id_pacient, schedule.id_doctor,schedule.id_schedule "
+                . " FROM schedule JOIN patient "
+                . " ON patient.id_pacient = schedule.id_pacient"
+                . " WHERE date_priema = :date_priema and schedule.id_doctor = :id_doctor ORDER BY time_priema";
         $result = $connection->prepare($sql);
         $result->bindValue(":id_doctor", $id_doctor);
         $result->bindValue(":date_priema", $date);
@@ -247,6 +250,15 @@ class Operator {
             $i++;
         }
         return $values;
+    }
+    public static function getScheduleOfDoctorByIDInBD ($id_doctor)
+    {
+        $connection = Db::getConnection();
+        $sql = "SELECT schedule FROM doctor WHERE id_doctor = $id_doctor";
+        $result = $connection->query($sql);
+        $result->execute();
+        
+        return $result->fetch(PDO::FETCH_ASSOC);
     }
 
     public static function getUslugi() {
@@ -368,12 +380,12 @@ class Operator {
     
     
     /**
-     *  Выбор доктора с помощью ID
-     * @param type $id_doctor
+     *  Выбор пациента с помощью ID
+     * @param type $userID пользователь
      * @param type $user_type_id
      * @return type массив
      */
-    public static function getByDoctorID($id_doctor,$user_type_id)
+    public static function getByDoctorID($userID,$user_type_id)
     {
         
         $connection = Db::getConnection();
@@ -381,7 +393,7 @@ class Operator {
                 . "where user_type.id = :user_type_id and patient.id_pacient = :doctor_id";
         $result = $connection->prepare($sql);
         $result->bindParam(":user_type_id",$user_type_id); // 2 это доктор
-        $result->bindParam(":doctor_id", $id_doctor);
+        $result->bindParam(":doctor_id", $userID);
         $result->execute();
         if ($result->execute())
         {
@@ -578,6 +590,46 @@ class Operator {
         $result->execute();
         $count = $result->rowCount();
         return $count;
+    }
+    
+    /**
+     * Получение расписание докторов
+     * @return type
+     */
+    public static function getDoctorsSchele()
+    {
+         $connection = Db::getConnection();
+         $SQL = "SELECT name, surname, patronymic, specialities.title, doctor.id_doctor, doctor.cabinet, doctor.id_special, doctor.schedule FROM doctor "
+                 . " JOIN patient ON doctor.id_doctor = patient.id_pacient "
+                 . " JOIN specialities ON doctor.id_special = specialities.id_special "
+                 . " ORDER By title";
+        $result = $connection->query($SQL);
+        $i = 0;
+        $values = array();
+        while ($row = $result->fetch()) {
+            $values[$i]['schedule'] = $row['schedule'];
+            $values[$i]['fio'] = $row['surname']." ".$row['name']." ".$row['patronymic'];
+            $values[$i]['title'] = $row['title'];
+            $values[$i]['id_doctor'] = $row['id_doctor'];
+            $values[$i]['cabinet'] = $row['cabinet'];
+            $values[$i]['id_special'] = $row['id_special'];
+            $i++;
+        }
+        return $values;
+    }
+    
+    public static function getDoctorDatasByID($doctorID)
+    {
+        $connection = Db::getConnection();
+         $SQL = "SELECT name, surname, patronymic, specialities.title, doctor.id_doctor, doctor.cabinet, doctor.id_special, doctor.schedule FROM doctor "
+                 . " JOIN patient ON doctor.id_doctor = patient.id_pacient "
+                 . " JOIN specialities ON doctor.id_special = specialities.id_special "
+                 . " WHERE doctor.id_doctor = :id_doctor";
+        $result = $connection->prepare($SQL);
+        $result->bindParam(":id_doctor", $doctorID);
+        $result->execute();
+        return $result->fetch(PDO::FETCH_ASSOC);
+
     }
 }
 /*

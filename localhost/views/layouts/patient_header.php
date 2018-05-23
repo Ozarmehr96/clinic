@@ -13,6 +13,7 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/templates/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/templates/css/bootstrap-datetimepicker.min.css" />
     <link href="/templates/css/bootstrap.css" rel="stylesheet">
     <link href="/templates/css/patient-page.css" rel="stylesheet">
@@ -29,3 +30,4 @@
 </head>
 
 <body>
+    <?php include_once(ROOT."/views/layouts/main_head.php");?>

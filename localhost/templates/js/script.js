@@ -2,7 +2,6 @@ $(document).ready(function () {
     $('#doctors').change(function () {
         $('#updatenachaloPriema option:last').insertBefore('#updatenachaloPriema option:first');
     });
-
     //функция начало календаря
     $(function () {
         $('#datetimepicker1').datetimepicker({
@@ -23,7 +22,10 @@ $(document).ready(function () {
         	useCurrent: true,
         });*/
     });
-
+    $('table tbody tr').click(function (event) {
+        $(this).addClass('highlight').siblings().removeClass('highlight');
+        console.log("we");
+    });
     /*!
      * 	Событие при изменение даты приема (При редактирование записи)
      */
@@ -32,7 +34,11 @@ $(document).ready(function () {
         stepping: 10,
         useCurrent: true,
         format: 'YYYY-MM-DD',
-        daysOfWeekDisabled: [0, 6]
+        daysOfWeekDisabled: [0, 6],
+        widgetPositioning: {
+            horizontal: "left",
+            vertical: "bottom"
+        }
     }).on('dp.change', function (event) {
         $("#specialities").val("");
         $("#doctors").val("");
@@ -211,14 +217,6 @@ $(document).ready(function () {
     	}
     }*/
 
-
-    /*!
-     * Очистка полей формы
-     **/
-    function ClearModalFormInputs(formID) {
-        $("#" + formID)[0].reset();
-    }
-
     /*!
      * Событие при открытие модального окна 
      **/
@@ -268,6 +266,12 @@ $(document).ready(function () {
     });
 });
 
+/*!
+ * Очистка полей формы
+ **/
+function ClearModalFormInputs(formID) {
+    $("#" + formID)[0].reset();
+}
 /*function timeNow(i) {
 	var d = new Date(),
 		h = (d.getHours() < 10 ? '0' : '') + d.getHours(),
@@ -426,7 +430,7 @@ function SearchPatients() {
         if (this.readyState == 4 && this.status == 200) {
             var receivedArr = this.responseText;
             if (receivedArr == false) {
-                alert("По Вашему запросу ничего не найдено!");
+                BeautyAlert("Уведомления", " По Вашему запросу ничего не найдено");
             }
             $("#search_table_body").append(receivedArr);
             console.log(receivedArr);
@@ -763,7 +767,8 @@ function CreateUniqueIndex(date, time, doctorID, patientID) {
     var timeForSplit = time.slice(0, 5);
     var time = timeForSplit.split(":");
     time = time[0] + time[1];
-    var uniqueIndex = year.toString() + month.toString() + day.toString() + time.toString() + doctorID.toString() + patientID.toString();
+    var space = "";
+    var uniqueIndex = year + space + month + space + day + space + time + space + doctorID + space + patientID;
     return uniqueIndex;
     //console.log(uniqueIndex);
 }
@@ -883,22 +888,13 @@ function ShowDoctorSchedule(elem) {
     var date = toDateFormat(datePri);
 
     $('#doctor-schedule-table tbody tr').html('');
-
-
     xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/operator/register-journal", true);
     xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var receivedArr = this.responseText;
-            /*if (receivedArr == false) {
-            	alert("По Вашему запросу ничего не найдено!");
-            } else {
-            	$('#doctor-schedule-table tr:last').after(receivedArr);
-            }*/
-            $('#doctor-schedule-table tr:last').after(receivedArr);
-            console.log("Дата: " + date + " ID: " + doctorID);
-            console.log(receivedArr);
+            $('#doctor-schedule-table tbody').append(receivedArr);
         }
     };
     xhttp.send("scheduleSubmit=1&date=" + encodeURIComponent(date) + "&id_doctor=" + encodeURIComponent(doctorID));
@@ -991,7 +987,6 @@ function UpdateRecordedPatient(elem) {
     scheduleIDForUpdate = $(elem).data("id_schedule");
     console.log("patientID->" + patientID + "\ndoctorID->" + doctorID + "\nscheduleID->" + scheduleIDForUpdate);
     GetUserDatasById(patientID, "updatefullnamePatient"); /*! Получение ФИО пациента */
-    SetSessionValForUserActons();
     GetScheduleByIdAndPast(scheduleIDForUpdate, doctorID); /*! Выбор данных о выбранном записи */
 }
 
@@ -1034,11 +1029,12 @@ $("#updaterecordPatientForm").submit(function (e) {
                     $("#update-articul").val(articul);
                     $("#update-doctorID").val(doctorID);
                     $("#scheduleID").val(scheduleIDForUpdate);
+                    // alert(articul);
                 }
             }
         }
     }
-    //e.preventDefault();
+    // e.preventDefault();
 });
 
 var CheckIsDoctorFreeBeforeUpdateRecordedPatient = function (date, time, idDoctor, idPatient) {
@@ -1083,10 +1079,18 @@ function CheckDateBeforeRecordAndSubmit(inputID) {
     var now = new Date();
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     var todayAsNum = today.getTime();
+    var weekend = cur.getDay();
     if (curAsNum < todayAsNum) {
         OpenWarningModal("Ошибка", "Дата приема недействительна");
         return flag = false;
-    } else return flag = true;
+    } else {
+        if (weekend == 0) {
+            OpenWarningModal("Ошибка", "На выходные дни прием не ведется");
+            return flag = false;
+        } else {
+            return flag = true;
+        }
+    }
 }
 /*!
  * Событие при изменение выбранного эклемента выпадающего списка 
@@ -1100,17 +1104,28 @@ function SpecialityChangeFun(elem) {
     }
 }
 
+
+
 function DoctorChangeFun(elem) {
     $("#updatenachaloPriema").val("");
     var date = $("#updatedatetimepickerZapicDataPriema").val();
     doctorID = $(elem).val();
     if (doctorID != "") { //Если выбранный элемент не равняется пустым
         FillSelectOptionsWithDoctorTimeWorkWithouotAttrSelect(doctorID, date);
-
-
-
-
     }
+}
+
+function FillSelectOptions(sendVal, selectID, selectedOptionVal) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/operator/patients", true);
+    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var options = this.responseText;
+            $(select).append(options);
+        }
+    };
+    xhttp.send(sendVal + "=true");
 }
 
 /*!
@@ -1289,47 +1304,60 @@ function SetOwnDate(date, idDatetime_picker) {
         date: new Date(date),
     });
 }
-/*
-var h = (function BB(va, callback) {
-	alert("Hello" + va);
-	a = "Hello? mahmud";
-	callback(a);
-})();
-var gg;
-var b = BB("ozar", function (v) {
-	gg = v;
-});
-alert(gg);
-*/
 
-function SetSessionValForUserActons() {
+/*!
+ * Вывод какой либо информации ALERT()
+ */
+function BeautyAlert(title, text) {
+    $(".alert").removeClass("in").show();
+    $(".alert").delay(800).addClass("in").fadeOut(500);
+    $("#text-alert").text(text);
+    $("#title-alert").text(title);
+}
+
+/*!
+ * Просмотр данные и график работы определенного доктора
+ */
+function ViewСertainDoctorSchedule(elem) {
+    var doctorID = $(elem).data("id");
+    for (i = 0; i < 6; i++) {
+        $("#days" + i).empty();
+    }
     var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/management", false);
+    xhttp.open("POST", "/operator/doctorView", true);
     xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var myObj = this.responseText;
-            alert(myObj);
+            //$("#doctorScheduleModalBoxTitle").text(this.responseText);
+            var myObj = JSON.parse(this.responseText);
+            var title = myObj.title + ": " + myObj.fio;
+            var cabinet = "Кабинет: " + myObj.cabinet;
+            $("#doctorScheduleModalBoxTitle").text(title);
+            $("#cabinetViewDoctorShedule").text(cabinet);
+            var schedule = myObj.schedule;
+            var days = schedule.split(",");
+            $("#days0").text(days[0]);
+            $("#days1").text(days[1]);
+            $("#days2").text(days[2]);
+            $("#days3").text(days[3]);
+            $("#days4").text(days[4]);
+            $("#days5").text(days[5]);
+            console.log(myObj);
         }
     };
-    xhttp.send("setSession=true");
+    xhttp.send("doctorView=true&id=" + encodeURIComponent(doctorID));
+    $("#doctorScheduleModalBox").modal('show');
+
 }
 
-/*! ****************************** Patient PAGE ***************************/
-function GetPatientRecord() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/patient/gets", true);
-    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var myObj = this.responseText;
-            $("#recordList").append(myObj);
-        }
-    };
-    xhttp.send("getRecords=1");
-}
 
-(function GetRecordList() {
-    $("#recordList").empty();
-    GetPatientRecord();
-})();
+
+/* if(time() - $_SESSION['timestamp'] > 900) { //subtract new timestamp from the old one
+    echo"<script>alert('15 Minutes over!');</script>";
+    unset($_SESSION['username'], $_SESSION['password'], $_SESSION['timestamp']);
+    $_SESSION['logged_in'] = false;
+    header("Location: " . index.php); //redirect to index.php
+    exit;
+} else {
+    $_SESSION['timestamp'] = time(); //set new timestamp
+}*/

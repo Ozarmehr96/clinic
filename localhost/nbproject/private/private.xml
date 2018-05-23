@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="21">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="29">
         <file>
             <url>models/Operator.php</url>
             <bookmark id="13">
                 <name/>
-                <line>326</line>
+                <line>338</line>
                 <key/>
             </bookmark>
             <bookmark id="16">
                 <name/>
-                <line>487</line>
+                <line>499</line>
                 <key/>
             </bookmark>
             <bookmark id="17">
                 <name/>
-                <line>497</line>
+                <line>509</line>
                 <key/>
             </bookmark>
         </file>
@@ -23,52 +23,57 @@
             <url>controllers/OperatorController.php</url>
             <bookmark id="10">
                 <name/>
-                <line>89</line>
+                <line>95</line>
                 <key/>
             </bookmark>
             <bookmark id="9">
                 <name/>
-                <line>98</line>
+                <line>104</line>
                 <key/>
             </bookmark>
             <bookmark id="12">
                 <name/>
-                <line>224</line>
+                <line>230</line>
                 <key/>
             </bookmark>
             <bookmark id="6">
                 <name/>
-                <line>231</line>
+                <line>237</line>
                 <key/>
             </bookmark>
-            <bookmark id="7">
+            <bookmark id="22">
                 <name/>
-                <line>320</line>
+                <line>256</line>
                 <key/>
             </bookmark>
-            <bookmark id="14">
+            <bookmark id="29">
                 <name/>
-                <line>327</line>
+                <line>265</line>
                 <key/>
             </bookmark>
-            <bookmark id="15">
+            <bookmark id="26">
                 <name/>
-                <line>349</line>
+                <line>267</line>
+                <key/>
+            </bookmark>
+            <bookmark id="23">
+                <name/>
+                <line>505</line>
                 <key/>
             </bookmark>
             <bookmark id="21">
                 <name/>
-                <line>523</line>
+                <line>545</line>
                 <key/>
             </bookmark>
             <bookmark id="20">
                 <name/>
-                <line>588</line>
+                <line>610</line>
                 <key/>
             </bookmark>
             <bookmark id="19">
                 <name/>
-                <line>595</line>
+                <line>617</line>
                 <key/>
             </bookmark>
         </file>
@@ -98,9 +103,8 @@
         <group>
             <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/controllers/OperatorController.php</file>
             <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/controllers/PatientController.php</file>
-            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/components/Router.php</file>
-            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/components/Redirect.php</file>
-            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/models/Patient.php</file>
+            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/models/Operator.php</file>
+            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/views/layouts/header.php</file>
             <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/config/routes.php</file>
         </group>
     </open-files>

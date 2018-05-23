@@ -41,6 +41,8 @@ class Redirect {
             
             if($_SESSION['user_type'] != $user_type)
             {
+              echo "Тип пользователя в сессии-> ". $_SESSION['user_type'];
+              echo "Текущий тип пользователя->". $user_type;
                 echo "<h4>Доступ запрещен!</h4>";
                 exit();
             }
@@ -85,8 +87,16 @@ class Redirect {
            case 'operator': header("Location: /operator");exit();
            case 'patient': header("Location: /patient");exit();
            case 'doctor': header("Location: /doctor");exit();
+           case 'heads-doctor': header("Location: /heads-doctor");exit();
            default: break;
        }
        return TRUE;
+    }
+    
+    public static function getUserIDFromSession()
+    {
+        $userID = "";
+        if (isset($_SESSION['user_id'])) $userID = $_SESSION['user_id'];
+        return $userID;   
     }
 }

@@ -7,13 +7,16 @@
  */
 
 return array(
+    'heads-doctor'  =>  'headsDoctor/index',
     'operator'  =>  'operator/index',
     'operator/schedule'  =>  'operator/index',
     //'operator/get/pacietn/by/id/([0-9]+)'  =>  'operator/GetUserById/$1',
     'operator/register-journal'  =>  'operator/registerJournal',
     'operator/register-journal-record'  =>  'operator/registerJournalRecord',
     'operator/register-journal-record-update'  =>  'operator/registerJournalRecordUpdate',
+    'operator/doctor-shedule'  =>  'operator/doctorShedule',
     'operator/patients'  =>  'operator/patients',
+    'operator/doctorView'  =>  'operator/doctorViewDatas',
     'operator/add/patient' =>  'operator/addPatient',
     'operator/remove/patient' =>  'operator/removePatient',
     'operator/update/patient/([0-9]+)' =>  'operator/updatePatient/$1',

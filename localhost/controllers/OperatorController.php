@@ -1,4 +1,5 @@
 <?php
+require_once (ROOT.'\controllers\PatientController.php');
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -35,10 +36,15 @@ class OperatorController extends Redirect {
             return;
         }
         require_once ROOT.'/views/operator/schedule.php';
-        //echo '<script>OpenWarningModal("Ошибка", "Доктор уже занят в указанное время");</script>';
         return TRUE;
     }
     
+    public function actionDoctorShedule()
+    {
+        require_once ROOT.'/views/operator/doctor-shedule.php';
+        return TRUE;
+    }
+
     public function actionAddPatient()
     {
         $values = array();
@@ -142,7 +148,7 @@ class OperatorController extends Redirect {
             $result = Operator::UpdatePatientData($values);
             if ($result != NULL)
             {
-                 header("Location: /operator/patients");
+                 header("Location: /");
                 exit();
             }
             else
@@ -196,7 +202,7 @@ class OperatorController extends Redirect {
                 $fio = $val['surname']." ". $val['name']." ".$val['patronymic'];
                 echo '<tr data-id="'.$val['id_pacient'].'" data-zapicat="true" class="open-modal-pacient-data pacientSearchTable" onclick="ShowUserDatasOnModal(this)">'
                         . '<td>'.$i.'</td>'
-                        . '<td class="pacientFIO" id="pacientFIO" nowrap>'.$fio.'</td>'
+                        . '<td class="pacientFIO canClick" id="pacientFIO" nowrap>'.$fio.'</td>'
                         . '<td>'.Patient::ConvertToSex($val['sex']).'</td>'
                         . '<td>'.$val['date_of_birth'].'</td>'
                         
@@ -229,7 +235,7 @@ class OperatorController extends Redirect {
       * Запись пациента, журнал регистрации пациентов
       * @return boolean
       */
-    public function actionRegisterJournal(){
+    public  function actionRegisterJournal(){
         
         $officces = array();
         $officces = Operator::getDoctorsOfficces();
@@ -238,10 +244,9 @@ class OperatorController extends Redirect {
         $uslugi = Operator::getUslugi();
         //print_r($officces);
         $doctorSchedule = array();
-        $doctorSchedule = Operator::getDoctorSchedule("8","2018-05-15");
-       // print_r($doctorSchedule);
+        $doctorSchedule = Operator::getDoctorSchedule("62","2018-05-21");
+        //print_r($doctorSchedule);
         $time1 = new DateTime();
-        $TimesInArray = $this->TimesInArray(15);
         
         
         if (isset($_POST['scheduleSubmit'])) {
@@ -251,22 +256,26 @@ class OperatorController extends Redirect {
             $doctorSchedule = array();
             $doctorSchedule = Operator::getDoctorSchedule($id_doctor,$date);
             $res = "";
-           
             
-            if ($doctorSchedule == NULL) 
+            // 1. Нам нужно получить номер дня в недели
+            // $numbeyDayInWeek = PatientController::getNumberDayOfWeek($date);  
+             
+            // 2. Получить расписание определенного доктора в текстовом виде
+            $workTimeOfDoctorById =  Operator::getScheduleOfDoctorByIDInBD($id_doctor);
+            $text = $workTimeOfDoctorById['schedule'];
+            $callBack = array("OperatorController","MyCallBackFunction");
+            $TimesInArray = array();
+            $TimesInArray = PatientController::SheduleOfDoctors($text, $date, $callBack,1);
+           if ($doctorSchedule == NULL) 
             {
-                for ($i = 8; $i < 18; $i++) {
-                    for ($j = 0; $j < 60; $j += 15) {
-                        $time = new DateTime();
-                        $time->setTime($i, $j, 00);
-                        echo '<tr id="timeZapic" onclick="ZapicPatient(this)" data-id="">'
+                PatientController::SheduleOfDoctors($text, $date,function($array){}, function($time){
+                    echo '<tr id="timeZapic" onclick="ZapicPatient(this)" data-id="">'
                         . '<td>' . $time->format('H:i:s') . '</td>'
                         . '<td data-id=""></td>'
                         . '<td data-id=""></td>'
                         . '<td data-id=""></td>'
                         . '</tr>';
-                    }
-                }
+                });
             } 
            else 
             {
@@ -281,7 +290,7 @@ class OperatorController extends Redirect {
                         $fioPatient = $valofDoctorSchedule['surname']." ".$valofDoctorSchedule['name']." ".$valofDoctorSchedule['patronymic'];
                         // если тек. время == время записи пациента
                         if ($valofDoctorSchedule['time_priema'] == $keyofTimes) {
-                            $valOfTimes = '<td onclick = "ShowUserDatasOnModal(this)" data-id="' . $valofDoctorSchedule['id_pacient'] . '">' . $fioPatient. '</td>';
+                            $valOfTimes = '<td class = "canClick" onclick = "ShowUserDatasOnModal(this)" data-id="' . $valofDoctorSchedule['id_pacient'] . '">' . $fioPatient. '</td>';
                             $patient_id = $valofDoctorSchedule['id_pacient'];
                             $notess = $valofDoctorSchedule['notes'];
                             $option = '<td class="optionTD" id = "actionTD">'
@@ -291,13 +300,7 @@ class OperatorController extends Redirect {
                         }
                     }
                     
-                    
-                    /*
-                     *  data-id_schedule="$zapic['id_schedule']" 
-                     * data-doctor_id="$zapic['id_doctor']" 
-                     * data-patient_id="$zapic['id_pacient']" 
-                     */
-                    if ($valOfTimes == "") $valOfTimes = '<td data-id=""></td>';
+                   if ($valOfTimes == "") $valOfTimes = '<td data-id=""></td>';
                      $notes = '<td data-id="">'.$notess.'</td>';
                     $timePriem = '<td id="timeZapic" onclick="ZapicPatient(this)" data-id="'.$patient_id.'">' . $keyofTimes . '</td>';
                     //if ($valOfTimes == "") $valOfTimes = $timePriem;
@@ -321,7 +324,20 @@ class OperatorController extends Redirect {
         return TRUE;
     }
     
-    /**
+    
+    public function actionDoctorViewDatas()
+    {
+        if (isset($_POST['doctorView']))
+        {
+            $doctorID = $_POST['id'];
+            $result = Operator::getDoctorDatasByID($doctorID);
+            $result['fio'] = $result['surname']." ".$result['name']." ".$result['patronymic'];
+            echo json_encode($result);
+            return;
+        }
+    }
+
+        /**
      *  Запись пациента
      */
     public function actionRegisterJournalRecord()
@@ -378,7 +394,7 @@ class OperatorController extends Redirect {
             $recordDatas['nachaloPriema'] = $_POST['nachaloPriema'];
             $recordDatas['cost'] = $_POST['cost'];
             $recordDatas['notes'] = $_POST['notes'];
-            $recordDatas['addedUserId'] = "1";
+            $recordDatas['addedUserId'] = $_SESSION['user_id'];
             $recordDatas['doctorID'] = $_POST['doctorID'];
             $recordDatas['patientID'] = $_POST['patientID'];
             $recordDatas['articul'] = $_POST['articul'];
@@ -386,14 +402,14 @@ class OperatorController extends Redirect {
             $result = Operator::PatientRecord($recordDatas);
            if ($result != NULL)
             {
-                header("Location: /operator/register-journal");
+                header("Location: /");
                 exit();
             }
             return true;
-         /*foreach ($recordDatas as $key=>$value)
+         foreach ($recordDatas as $key=>$value)
          {
              echo $key."=>".$value."<br>";
-         }*/
+         }
             
            
         }
@@ -445,7 +461,7 @@ class OperatorController extends Redirect {
             $recordUpdateDatas['updatenachaloPriema'] = $_POST['updatenachaloPriema'];
             $recordUpdateDatas['updatecost'] = $_POST['updatecost'];
             $recordUpdateDatas['update-notes'] = $_POST['update-notes'];
-            $recordUpdateDatas['addedUserId'] = "1";
+            $recordUpdateDatas['addedUserId'] = $_SESSION['user_id'];
             $recordUpdateDatas['update-doctorID'] = $_POST['update-doctorID'];
             $recordUpdateDatas['update-articul'] = $_POST['update-articul'];
             $recordUpdateDatas['scheduleID'] = $_POST['scheduleID'];
@@ -453,7 +469,7 @@ class OperatorController extends Redirect {
             $result = Operator::UpdateRecordOfPatient($recordUpdateDatas);
            if ($result != NULL)
             {
-                header("Location: /operator");
+                header("Location: /");
                 exit();
             }
             return true;
@@ -487,20 +503,26 @@ class OperatorController extends Redirect {
      * Хранение времени в массив
      * @return type массив
      */
-    public static function TimesInArray($period)
+    public static function TimesInArray($period,$text,$date)
     {
-        $time = new DateTime();
-        $TimesInArray = array();
-        for ($i = 8; $i < 18; $i++) {
-            for ($j = 0; $j < 60; $j += $period) {
-                $time->setTime($i, $j, 00);
-                $TimesInArray[$time->format('H:i:s')] = "";
-            }
-        }
-        return $TimesInArray;
+         $TimesInArray = array();
+        PatientController::SheduleOfDoctors($text, $date, function($timesInArray){
+            return $TimesInArray = $timesInArray;
+         }, function ($n){});
     }
     
     /**
+     * Метод получает массив из другого из класса OperatorController
+     * Из класса который работает со временем, с графигом работы
+     * @param type $array
+     * @return type
+     */
+    public static function MyCallBackFunction($array)
+    {
+         return $array;
+    }
+
+        /**
      * Выводит ФИО пациента, если с другой страницы был отправлен ID
      */
     public function SetUserDataOnUlIfExists()
@@ -533,14 +555,14 @@ class OperatorController extends Redirect {
      * Выбор название услуги с помощью ID
      * @param type $id_uslugi
      */
-    public function getUsligiByID($id_uslugi)
+    public static function getUsligiByID($id_uslugi)
     {
         $uslugi = array();
         $uslugi = Operator::getUslugiById($id_uslugi);
         return $uslugi['name'];
     }
-    
-    public function getDoctorByID($id_doctor)
+
+    public static function getDoctorByID($id_doctor)
     {
         $doctor = array();
         $doctor= Operator::getByDoctorID($id_doctor,2);
@@ -548,7 +570,7 @@ class OperatorController extends Redirect {
         return $fio;
     }
     
-    public function getOperatorByID($id_operator)
+    public static function getOperatorByID($id_operator)
     {
         $operator = array();
         $operator= Operator::getByDoctorID($id_operator,3);
@@ -594,16 +616,27 @@ class OperatorController extends Redirect {
     {
         $doctorDatas = array();
         $doctorDatas = Operator::getDoctorSchedule($id_doctor, $date);
-        $TimesInArray = OperatorController::TimesInArray(15);
+        $workTimeOfDoctorById =  Operator::getScheduleOfDoctorByIDInBD($id_doctor);
+        $text = $workTimeOfDoctorById['schedule'];
+        $callBack = array("OperatorController","MyCallBackFunction");
+        $TimesInArray = array();
+        $TimesInArray = PatientController::SheduleOfDoctors($text, $date, $callBack,1);
         if ($doctorDatas == NULL) {
             echo '<option value="">Не выбрано</option>';
-            for ($i = 8; $i < 18; $i++) {
+            PatientController::SheduleOfDoctors($text, $date,function($array){}, function($time){
+                    echo '<option>' . $time->format('H:i:s') . '</option>';
+                });
+            
+            
+            
+            
+            /*for ($i = 8; $i < 18; $i++) {
                 for ($j = 0; $j < 60; $j += 15) {
                     $time = new DateTime();
                     $time->setTime($i, $j, 00);
                     echo '<option>' . $time->format('H:i:s') . '</option>';
                 }
-            }
+            }*/
         } else {
             echo '<option value="">Не выбрано</option>';
             foreach ($TimesInArray as $keyofTimes => $valOfTimes) {
@@ -624,5 +657,27 @@ class OperatorController extends Redirect {
         }
         return TRUE;
     }
-
+    
+    public static function getAllDoctorsSchedule()
+    {
+        $scheduleList = array();
+        $scheduleList = Operator::getDoctorsSchele();
+        foreach ($scheduleList as $item)
+        {
+            $day = explode(",", $item['schedule']);
+            if(isset($day[5])) $day5 = $day[5];
+            else $day5 = "";
+            echo '<tr>'
+                    . '<td>'.$item['title'].'</td>'
+                    . '<td data="'.$item['id_doctor'].'">'.$item['fio'].'</td>'
+                    . '<td>'.$item['cabinet'].'</td>'
+                    . '<td>'.$day[0].'</td>'
+                    . '<td>'.$day[1].'</td>'
+                    . '<td>'.$day[2].'</td>'
+                    . '<td>'.$day[3].'</td>'
+                    . '<td>'.$day[4].'</td>'
+                    . '<td>'.$day5.'</td>'
+                . '</tr>';
+        }
+    }
 }
