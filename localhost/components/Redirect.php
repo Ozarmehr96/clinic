@@ -41,7 +41,7 @@ class Redirect {
             
             if($_SESSION['user_type'] != $user_type)
             {
-                //require_once ROOT.'/views/ErrorPage.php';
+                require_once ROOT.'/views/ErrorPage.php';
                 exit();
             }
             }

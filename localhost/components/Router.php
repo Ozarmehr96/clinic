@@ -43,14 +43,17 @@ class Router {
             session_destroy();
             header("Location: /");
         }
-        
+        $noMatch = 0;
+        $v = false;
       // Проверить наличие такого запроса в router.php ($this->routes)
       foreach ($this->routes as $uriPattern => $path)
       {
          
+          
           //require_once ROOT.'/views/ErrorPage.php';
           if(preg_match("~^$uriPattern$~", $uri))
           {
+              //echo 'Ключ в массиве-> '.$uriPattern."<br> url сайта->".$uri;
               $this->count_match += 1;
               /**
                * $uriPattern - шаблон который нам нужен эти пути находятся в $routes.php (индекс массива, задано как имя)
@@ -87,7 +90,18 @@ class Router {
                   break;        // выйти из цикла
               }  
           }
+          else{ $noMatch+=1; $v = false;}
+          
+          
       }
+      //echo "<br>Нет совпадений = $noMatch";      
+      //echo '<br> Размер мессива '.count($this->routes);
+      //echo "<br>Количество совпадений = $this->count_match";
+      if($this->count_match == null && $noMatch == count($this->routes))
+      {
+          require_once ROOT.'/views/ErrorPage.php';
+      }
+      
     
     }
 }
