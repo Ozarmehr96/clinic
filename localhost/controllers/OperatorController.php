@@ -570,6 +570,14 @@ class OperatorController extends Redirect {
         return $fio;
     }
     
+    public static function getUserFIOByID($userID, $typeID)
+    {
+        $doctor = array();
+        $doctor= Operator::getByDoctorID($userID,$typeID);
+        $fio = $doctor['surname']." ".$doctor['name']." ".$doctor['patronymic'];
+        return $fio;
+    }
+    
     public static function getOperatorByID($id_operator)
     {
         $operator = array();
@@ -581,13 +589,13 @@ class OperatorController extends Redirect {
     /**
      * Метод заполнения выпадающего списка данными
      * Вызавается метод таким образом Название класса::Название метода() OperatorController::FullSelectOptions($dbname,$title,$id)
-     * @param type $dbname
-     * @param type $title
-     * @param type $id
+     * @param type $tableName навзание таблицы
+     * @param type $title столбец
+     * @param type $id by идентификатор строки
      */
-    public static function FullSelectOptions($dbname,$title,$id)
+    public static function FullSelectOptions($tableName,$title,$id)
     {
-        $optionsValues = Operator::getDatasForFillSelectOptions($dbname,$title,$id);
+        $optionsValues = Operator::getDatasForFillSelectOptions($tableName,$title,$id);
         //echo '<option value="">Не выбрано</option>';
         foreach ($optionsValues as $key => $val)
         {
@@ -595,6 +603,16 @@ class OperatorController extends Redirect {
         } 
     }
     
+    public static function FillDoctorSelectOption()
+    {
+         $optionsValues = Operator::getDoctors();
+        foreach ($optionsValues as $key => $val)
+        {
+           //$speciality_id = 'data-speciality_id="'.$val['id_special'].'"';
+           echo '<option value="'.$val['id_doctor'].'">'.$val['fio'].'</option>';
+        } 
+    }
+
     /**
      * Метод заполнения выпадающего списка 
      * Выбираются доктора в зависимости от специализации

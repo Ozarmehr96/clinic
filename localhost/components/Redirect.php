@@ -41,9 +41,7 @@ class Redirect {
             
             if($_SESSION['user_type'] != $user_type)
             {
-              echo "Тип пользователя в сессии-> ". $_SESSION['user_type'];
-              echo "Текущий тип пользователя->". $user_type;
-                echo "<h4>Доступ запрещен!</h4>";
+                //require_once ROOT.'/views/ErrorPage.php';
                 exit();
             }
             }

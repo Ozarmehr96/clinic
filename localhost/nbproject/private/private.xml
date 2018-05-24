@@ -68,12 +68,12 @@
             </bookmark>
             <bookmark id="20">
                 <name/>
-                <line>610</line>
+                <line>628</line>
                 <key/>
             </bookmark>
             <bookmark id="19">
                 <name/>
-                <line>617</line>
+                <line>635</line>
                 <key/>
             </bookmark>
         </file>
@@ -101,11 +101,13 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/controllers/HeadsDoctorController.php</file>
             <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/controllers/OperatorController.php</file>
             <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/controllers/PatientController.php</file>
+            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/models/Doctor.php</file>
             <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/models/Operator.php</file>
-            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/views/layouts/header.php</file>
-            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/config/routes.php</file>
+            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/models/Patient.php</file>
+            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/components/Settings.php</file>
         </group>
     </open-files>
 </project-private>

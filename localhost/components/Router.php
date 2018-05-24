@@ -48,7 +48,7 @@ class Router {
       foreach ($this->routes as $uriPattern => $path)
       {
          
-          
+          //require_once ROOT.'/views/ErrorPage.php';
           if(preg_match("~^$uriPattern$~", $uri))
           {
               $this->count_match += 1;
@@ -87,7 +87,6 @@ class Router {
                   break;        // выйти из цикла
               }  
           }
-          
       }
     
     }

@@ -7,7 +7,9 @@
  */
 
 return array(
+    'heads-doctor/add/employee'  =>  'headsDoctor/addEmployee',
     'heads-doctor'  =>  'headsDoctor/index',
+    'heads-doctor/searchDoctor'  =>  'headsDoctor/gets',
     'operator'  =>  'operator/index',
     'operator/schedule'  =>  'operator/index',
     //'operator/get/pacietn/by/id/([0-9]+)'  =>  'operator/GetUserById/$1',

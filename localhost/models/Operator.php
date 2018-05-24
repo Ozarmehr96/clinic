@@ -522,6 +522,28 @@ class Operator {
         return $values;
     }
     
+    
+    /**
+     * Получение списка докторов
+     * @return string массив
+     */
+    public static function getDoctors()
+    {
+        $connection = Db::getConnection();
+        $sql = "SELECT doctor.id_doctor, name, surname, patronymic FROM doctor "
+                . " JOIN patient ON doctor.id_doctor = patient.id_pacient "
+                . " ORDER BY surname ASC, name ASC, patronymic ASC";
+        $result = $connection->query($sql);
+        $i = 0;
+        $values = array();
+        while ($row = $result->fetch()) {
+            $values[$i]['id_doctor'] = $row['id_doctor'];
+            $values[$i]['fio'] = $row['surname']." ".$row['name']." ".$row['patronymic'];
+            $i++;
+        }
+        return $values;
+    }
+
     /**
      * Метод для проверки записал ли пациент или же свободен ли доктор 
      * Используется перед редактированием записи
@@ -631,6 +653,8 @@ class Operator {
         return $result->fetch(PDO::FETCH_ASSOC);
 
     }
+    
+    
 }
 /*
  * 

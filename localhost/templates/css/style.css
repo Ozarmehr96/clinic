@@ -450,3 +450,35 @@ td {
     width: 750px;
     margin: auto;
 }
+
+.page-404__icon {
+    background: url("/views/termometr.png");
+        display: inline-block;
+    width: 8.5rem;
+    height: 8.5rem;
+    vertical-align: bottom;
+}
+
+.page-404__btn {
+    width: 100%;
+    margin-top: 4rem;
+    max-width: 32rem;
+    color: white;
+    opacity: 0.7;
+}
+.page-404__btn:hover{
+    color: white;
+    opacity: 1;
+    box-shadow: 0 0 0 0 #40335f;
+        transition-duration: 0.2s;
+}
+
+.btn--violent {
+    background-color: #40335f;
+    box-shadow: 0 0 0 0 #40335f;
+    color: #fff;
+}
+
+.btn-pr {
+    background-color: #40335f;
+}

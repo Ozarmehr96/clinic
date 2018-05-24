@@ -416,9 +416,9 @@ function SearchPatients() {
     var name = $("#name").val() || 'undefined';
     var surname = $("#surname").val() || 'undefined';
     var patronymic = $("#fullname").val() || 'undefined';
-    var date_of_birth = $("#datetimepicker1").val() || '1996-09-09';
+    var date_of_birth = $("#datetimepicker1").val() || '1700-09-09';
     var date1 = date_of_birth.split("-");
-    var date = date1[2] + "-" + date1[1] + "-" + date1[0] || '1996-09-09';
+    var date = date1[2] + "-" + date1[1] + "-" + date1[0] || '1700-09-09';
     var inn = $("#police_number").val() || '0101';
     var passport_num = $("#passport").val() || '0001';
     var patient_card_num = $("#medicine-cart-number").val() || '0001';
@@ -465,6 +465,7 @@ var patient_id_from_search = "";
 
 function ShowUserDatasOnModal(elem) {
     ActivateFirstLiOfPatientModal();
+    // $("#id_doctor option:first").attr("selected", "selected");
     $("#remove-patient-button").css("display", "inline-block");
     var get_pacient_data_id_from_table = "";
     var visibleZapisatButton = "";
@@ -884,20 +885,23 @@ function RedirectForRecord() {
  **/
 function ShowDoctorSchedule(elem) {
     var datePri = $(".data-priema").val();
-    var doctorID = $(elem).data("id");
-    var date = toDateFormat(datePri);
+    if (CheckDateIsTrue(".data-priema") == true) {
+        var doctorID = $(elem).data("id");
+        var date = toDateFormat(datePri);
 
-    $('#doctor-schedule-table tbody tr').html('');
-    xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/operator/register-journal", true);
-    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var receivedArr = this.responseText;
-            $('#doctor-schedule-table tbody').append(receivedArr);
-        }
-    };
-    xhttp.send("scheduleSubmit=1&date=" + encodeURIComponent(date) + "&id_doctor=" + encodeURIComponent(doctorID));
+        $('#doctor-schedule-table tbody tr').html('');
+        xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/operator/register-journal", true);
+        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var receivedArr = this.responseText;
+                $('#doctor-schedule-table tbody').append(receivedArr);
+            }
+        };
+        xhttp.send("scheduleSubmit=1&date=" + encodeURIComponent(date) + "&id_doctor=" + encodeURIComponent(doctorID));
+
+    }
 
 }
 
@@ -1092,6 +1096,30 @@ function CheckDateBeforeRecordAndSubmit(inputID) {
         }
     }
 }
+
+function CheckDateIsTrue(inputField) {
+    var flag = false;
+
+    var currentDateOfInput = new Date(ConvertToYYMMDDDateFormat($(inputField).val()));
+    var cur = new Date(currentDateOfInput.getFullYear(), currentDateOfInput.getMonth(), currentDateOfInput.getDate());
+    var curAsNum = cur.getTime();
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var todayAsNum = today.getTime();
+    var weekend = cur.getDay();
+    if (curAsNum < todayAsNum) {
+        OpenWarningModal("Ошибка", "Дата приема недействительна");
+        return flag = false;
+    } else {
+        if (weekend == 0) {
+            OpenWarningModal("Ошибка", "На выходные дни прием не ведется");
+            return flag = false;
+        } else {
+            return flag = true;
+        }
+    }
+}
+
 /*!
  * Событие при изменение выбранного эклемента выпадающего списка 
  */
