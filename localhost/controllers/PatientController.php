@@ -142,6 +142,16 @@ class PatientController extends Redirect {
         return $result['title'];
     }
     
+    /**
+     * Метод для возвращение фамилии и имени пользователя
+     * @return type имя и фамилия пользователя
+     */
+    public function getPatientFI()
+    {
+        $result = Patient::getPatientByID($this->patientID);
+        return $result['name']." ".$result['surname'];
+    }
+
     public function actionGets()
     {
         if(isset($_POST['getRecords']))

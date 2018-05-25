@@ -82,11 +82,11 @@ class Operator {
         $sql = "INSERT INTO patient (name, surname, patronymic, sex, date_of_birth, passport_num, phone, patient_card_num,"
                 . "invalidnost, adress, social_status, id_citizenship, id_region, email, snils, work_place,"
                 . "data_vidachi_pass, inn, type_medical_policy, start_medical_policy, end_medical_policy, Id_insurance_company,"
-                . "id_doctor, fixing_date, id_university, id_added_operator, user_type) "
+                . "id_doctor, fixing_date, id_university, id_added_operator, user_type, police_number) "
                 . "VALUES (:name,:surname,:patronymic,:sex,:date_of_birth,:passport_num,:phone,:patient_card_num,"
                 . ":invalidnost,:adress,:social_status,:id_citizenship,:id_region,:email,:snils,:work_place,"
                 . ":data_vidachi_pass, :inn,:type_medical_policy, :start_medical_policy, :end_medical_policy,:Id_insurance_company,"
-                . ":id_doctor,:fixing_date,:id_university, :id_added_operator, :user_type) "
+                . ":id_doctor,:fixing_date,:id_university, :id_added_operator, :user_type,:police_number) "
                 . " ON DUPLICATE KEY UPDATE passport_num=passport_num ";
         
         $result = $db->prepare($sql);
@@ -115,6 +115,7 @@ class Operator {
         $result->bindParam(":Id_insurance_company", $values['Id_insurance_company']);
         $result->bindParam(":id_doctor", $values['id_doctor']);
         $result->bindParam(":fixing_date", $values['fixing_date']);
+        $result->bindParam(":police_number", $values['police_number']);
         $result->bindParam(":id_university", $values['id_university']);
         $result->bindParam(":id_added_operator", $values['id_added_operator']);
         $result->bindParam(":user_type", $user_type);
@@ -128,15 +129,27 @@ class Operator {
     
     public static function UpdatePatientData($values)
     {
-        $connection = Db::getConnection();      
-        
+        $connection = Db::getConnection(); 
+        $passport = "";
+        $data_Vidachi_pass = "";
+       if (!preg_match('/patient/', $_SESSION['user_type']))
+       {
+           $passport = 'passport_num = :passport_num,';
+           $data_Vidachi_pass = 'data_vidachi_pass=:data_vidachi_pass,';
+       }
+       else
+       {
+           $passport ="";
+           $data_Vidachi_pass="";
+       }
          $sql = "UPDATE patient SET name = :name, surname=:surname, patronymic=:patronymic, sex=:sex, date_of_birth=:date_of_birth,"
-                . " passport_num = :passport_num, phone = :phone, "
+                . " $passport phone = :phone, "
                 . " invalidnost=:invalidnost, adress=:adress, social_status=:social_status, id_citizenship=:id_citizenship, "
-                . " id_region=:id_region, email=:email, snils=:snils, work_place=:work_place, data_vidachi_pass=:data_vidachi_pass,"
+                . " id_region=:id_region, email=:email, snils=:snils, work_place=:work_place, $data_Vidachi_pass "
                 . " inn=:inn, type_medical_policy=:type_medical_policy, start_medical_policy=:start_medical_policy,"
                 . " end_medical_policy=:end_medical_policy, Id_insurance_company=:Id_insurance_company,"
-                . " id_doctor = :id_doctor, fixing_date = :fixing_date, id_university=:id_university, id_added_operator = :id_added_operator "
+                . " id_doctor = :id_doctor, fixing_date = :fixing_date, id_university=:id_university, "
+                . " id_added_operator = :id_added_operator,police_number = :police_number "
                 . " WHERE id_pacient = :idt";
         
         $result = $connection->prepare($sql);
@@ -148,7 +161,11 @@ class Operator {
         $result->bindParam(":date_of_birth", $values['date_of_birth']);
         $result->bindParam(":sex", $values['sex']);
         $result->bindParam(":phone", $values['phone']);
-        $result->bindParam(":passport_num", $values['passport_num']);
+        if (!preg_match('/patient/', $_SESSION['user_type']))
+        {
+            $result->bindParam(":passport_num", $values['passport_num']);
+            $result->bindParam(":data_vidachi_pass", $values['data_vidachi_pass']);
+        }
         $result->bindParam(":invalidnost", $values['invalidnost']);
         $result->bindParam(":adress", $values['adress']);
         $result->bindParam(":social_status", $values['social_status']);
@@ -157,14 +174,16 @@ class Operator {
         $result->bindParam(":email", $values['email']);
         $result->bindParam(":snils", $values['snils']);
         $result->bindParam(":work_place", $values['work_place']);
-        $result->bindParam(":data_vidachi_pass", $values['data_vidachi_pass']);
+       
         $result->bindParam(":inn", $values['inn']);
         $result->bindParam(":type_medical_policy", $values['type_medical_policy']);
         $result->bindParam(":start_medical_policy", $values['start_medical_policy']);
         $result->bindParam(":end_medical_policy", $values['end_medical_policy']);
         $result->bindParam(":Id_insurance_company", $values['Id_insurance_company']);
         $result->bindParam(":id_doctor", $values['id_doctor']);
+        $result->bindParam(":id_doctor", $values['id_doctor']);
         $result->bindParam(":fixing_date", $values['fixing_date']);
+        $result->bindParam(":police_number", $values['police_number']);
         $result->bindParam(":id_university", $values['id_university']);
         $result->bindParam(":id_added_operator", $values['id_added_operator']);
         $result->execute();
@@ -654,7 +673,34 @@ class Operator {
 
     }
     
+    /**
+     * После генерации пароля проверяем, ну сеществует ли такой пароль в БД
+     * @param type $passwd
+     * @return type
+     */
+    public static function CheckIsExistsPasswd($passwd)
+    {
+        $connection = Db::getConnection();
+        $SQL = "SELECT id_pacient FRom patient WHERE password = '$passwd' ";
+        $result = $connection->query($SQL);
+        $result->execute();
+        return $result->rowCount();
+    }
     
+    /**
+     * Редактирование пароля пользователя
+     * @param type $pass пароль
+     * @param type $id id_пользователя
+     * @return type количество затронутых строк
+     */
+    public static function UpdateUserPass($pass,$id)
+    {
+        $connection = Db::getConnection();
+        $SQL = "UPDATE patient SET password = '$pass' WHERE id_pacient = '$id' ";
+        $result = $connection->query($SQL);
+        $result->execute();
+        return $result->rowCount();
+    }
 }
 /*
  * 

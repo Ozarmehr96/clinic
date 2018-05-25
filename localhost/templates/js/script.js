@@ -34,7 +34,7 @@ $(document).ready(function () {
         stepping: 10,
         useCurrent: true,
         format: 'YYYY-MM-DD',
-        daysOfWeekDisabled: [0, 6],
+        daysOfWeekDisabled: [0],
         widgetPositioning: {
             horizontal: "left",
             vertical: "bottom"
@@ -197,26 +197,6 @@ $(document).ready(function () {
         GetMaxIdFromPatientTableAdnSet("selected-user-patient_card_num");
     });
 
-
-
-
-    /*!
-     * Метод для установки времени по умолчанию, то есть для вставки собственной даты
-     **/
-    /*function SetOwnDate(date, idDatetime_picker) {
-    	if (date != null) {
-    		var dateParts = date.split("-");
-    		ownDate = "'" + dateParts[0] + ", " + dateParts[1] + "," + dateParts[2] + "'";
-    		$(idDatetime_picker).datetimepicker({
-    			locale: 'ru',
-    			stepping: 10,
-    			format: 'DD-MM-YYYY',
-    			defaultDate: new Date(ownDate),
-    			useCurrent: false,
-    		});
-    	}
-    }*/
-
     /*!
      * Событие при открытие модального окна 
      **/
@@ -265,6 +245,51 @@ $(document).ready(function () {
         //$("#selected-user-sex").attr("value") = $("#selected-user-sex").attr("selected").val();
     });
 });
+
+
+/*!
+ * Авторизация
+ */
+$("#loginForm").submit(function (e) {
+    var result = Authorization();
+    if (result > 1 || result == 0) {
+        OpenWarningModal("Ошибка", "Неправильный пароль или логин");
+        return false;
+    }
+});
+
+/*! 
+ * Проверка логина и пароля
+ */
+var Authorization = function () {
+    var login = $("#login").val();
+    var pass = $("#password").val();
+    var rowCount = "";
+    $.ajax({
+        'async': false,
+        type: "POST",
+        url: "/authorization",
+        dataType: 'html',
+        //data: {'b': val }, // Можно вот так указать, только внутри фигурных скобках!!!
+        data: 'authorization=true&login=' + login + '&password=' + pass, // Можно еще вот так, без фигурных скобок
+        success: function (result) {
+            rowCount = result;
+        }
+    });
+    return rowCount;
+
+    /* var xhttp = new XMLHttpRequest();
+     xhttp.open("POST", "/authorization", true);
+     xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+     xhttp.onreadystatechange = function () {
+         if (this.readyState == 4 && this.status == 200) {
+             var result = this.responseText;
+             callback(result);
+         }
+     };
+     xhttp.send("authorization=true&login=" + encodeURIComponent(login) + "&password=" + encodeURIComponent(pass));*/
+};
+
 
 /*!
  * Очистка полей формы
@@ -462,14 +487,17 @@ function ConvertToYYMMDDDateFormat(date) {
  * Открытие модального окна для просмотра данные выбранного пациента
  */
 var patient_id_from_search = "";
+var selectedPatient;
 
 function ShowUserDatasOnModal(elem) {
     ActivateFirstLiOfPatientModal();
+    $("#forPass").empty();
     // $("#id_doctor option:first").attr("selected", "selected");
     $("#remove-patient-button").css("display", "inline-block");
     var get_pacient_data_id_from_table = "";
     var visibleZapisatButton = "";
     get_pacient_data_id_from_table = $(elem).data("id");
+    selectedPatient = get_pacient_data_id_from_table;
     $("#remove-patient-button").data("id", get_pacient_data_id_from_table);
     patient_id_from_search = get_pacient_data_id_from_table;
     visibleZapisatButton = $(elem).data("zapicat");
@@ -499,6 +527,7 @@ function ShowUserDatasOnModal(elem) {
             $("#date_of_birth").val(myObj.date_of_birth);
             $("#selected-user-phone").val(myObj.phone);
             $("#selected-user-patient_card_num").val(myObj.patient_card_num);
+            $("#forLogin").text("Логин: " + myObj.patient_card_num);
 
             $("#selected-user-invalidnost").val(myObj.invalidnost);
             $("#selected-user-adress").val(myObj.adress);
@@ -512,6 +541,7 @@ function ShowUserDatasOnModal(elem) {
 
             $("#selected-user-type_medical_policy").val(myObj.type_medical_policy); //Страховой полис
             $("#datetimepicker-policy-start").val(myObj.start_medical_policy);
+            $("#selected-user-police_number").val(myObj.police_number);
             $("#datetimepicker-policy-end").val(myObj.end_medical_policy);
             $("#selected-user-comp").val(myObj.Id_insurance_company);
             $("#selected-user-snils").val(myObj.snils);
@@ -529,6 +559,24 @@ function ShowUserDatasOnModal(elem) {
     xhttp.send("id=" + encodeURIComponent(get_pacient_data_id_from_table));
     get_pacient_data_id_from_table = 0;
 }
+
+
+/**
+ * Создание пароля 
+ */
+function CreatePass() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/operator/patients", true);
+    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var result = this.responseText;
+            $("#forPass").text("Пароль: " + result);
+        }
+    };
+    xhttp.send("createpass=true&userid=" + encodeURIComponent(selectedPatient));
+}
+
 
 function ShowPatientDatasOnModalForPatient(elem) {
     ActivateFirstLiOfPatientModal();
@@ -566,6 +614,7 @@ function ShowPatientDatasOnModalForPatient(elem) {
             $("#date_of_birth").val(myObj.date_of_birth);
             $("#selected-user-phone").val(myObj.phone);
             $("#selected-user-patient_card_num").val(myObj.patient_card_num);
+            $("#forLogin").text(myObj.patient_card_num);
 
             $("#selected-user-invalidnost").val(myObj.invalidnost);
             $("#selected-user-adress").val(myObj.adress);
@@ -579,6 +628,7 @@ function ShowPatientDatasOnModalForPatient(elem) {
 
             $("#selected-user-type_medical_policy").val(myObj.type_medical_policy); //Страховой полис
             $("#datetimepicker-policy-start").val(myObj.start_medical_policy);
+            $("#selected-user-police_number").val(myObj.police_number);
             $("#datetimepicker-policy-end").val(myObj.end_medical_policy);
             $("#selected-user-comp").val(myObj.Id_insurance_company);
             $("#selected-user-snils").val(myObj.snils);
@@ -591,6 +641,7 @@ function ShowPatientDatasOnModalForPatient(elem) {
 
             fio = myObj.surname + " " + myObj.name + " " + myObj.patronymic;
             $(".selected_PacientModalBoxTitle").text("Карточка пациента: " + fio);
+            console.log(myObj);
         }
     };
     xhttp.send("id=" + encodeURIComponent(get_pacient_data_id_from_table));
@@ -1372,7 +1423,7 @@ function ViewСertainDoctorSchedule(elem) {
             $("#days3").text(days[3]);
             $("#days4").text(days[4]);
             $("#days5").text(days[5]);
-            console.log(myObj);
+            console.log(this.responseText);
         }
     };
     xhttp.send("doctorView=true&id=" + encodeURIComponent(doctorID));

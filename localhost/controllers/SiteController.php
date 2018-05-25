@@ -35,7 +35,6 @@ class SiteController extends Redirect {
             $user = array();
             $user = Site::getUser($login, $password);
             $result = $user['count(*)'];
-           // print_r($user);
             if ($result == 1)
             {
                  parent::SetSessionAndRedirect($user['id_pacient'], $user['type']);
@@ -43,10 +42,34 @@ class SiteController extends Redirect {
             else {
                  $isExistUSer = false;
             }
-            
         }
-        
+        if (isset($_POST['authorization']))
+        {
+            $login = $_POST['login'];
+            $password = $_POST['password'];
+           
+            $user = array();
+            $user = Site::getUser($login, $password);
+            $result = $user['count(*)'];
+            echo $result;
+            exit();
+        }
         require_once ROOT.'/views/index/index.php';
         return TRUE;
+    }
+    
+    public function actionAuthorization()
+    {
+        if (isset($_POST['authorization']))
+        {
+            $login = $_POST['login'];
+            $password = $_POST['password'];
+           
+            $user = array();
+            $user = Site::getUser($login, $password);
+            $result = $user['count(*)'];
+            echo $result;
+            exit();
+        }
     }
 }

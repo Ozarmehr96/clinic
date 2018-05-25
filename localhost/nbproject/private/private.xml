@@ -5,17 +5,17 @@
             <url>models/Operator.php</url>
             <bookmark id="13">
                 <name/>
-                <line>338</line>
+                <line>357</line>
                 <key/>
             </bookmark>
             <bookmark id="16">
                 <name/>
-                <line>499</line>
+                <line>518</line>
                 <key/>
             </bookmark>
             <bookmark id="17">
                 <name/>
-                <line>509</line>
+                <line>528</line>
                 <key/>
             </bookmark>
         </file>
@@ -23,57 +23,57 @@
             <url>controllers/OperatorController.php</url>
             <bookmark id="10">
                 <name/>
-                <line>95</line>
+                <line>96</line>
                 <key/>
             </bookmark>
             <bookmark id="9">
                 <name/>
-                <line>104</line>
+                <line>105</line>
                 <key/>
             </bookmark>
             <bookmark id="12">
                 <name/>
-                <line>230</line>
+                <line>247</line>
                 <key/>
             </bookmark>
             <bookmark id="6">
                 <name/>
-                <line>237</line>
+                <line>254</line>
                 <key/>
             </bookmark>
             <bookmark id="22">
                 <name/>
-                <line>256</line>
+                <line>273</line>
                 <key/>
             </bookmark>
             <bookmark id="29">
                 <name/>
-                <line>265</line>
+                <line>282</line>
                 <key/>
             </bookmark>
             <bookmark id="26">
                 <name/>
-                <line>267</line>
+                <line>284</line>
                 <key/>
             </bookmark>
             <bookmark id="23">
                 <name/>
-                <line>505</line>
+                <line>522</line>
                 <key/>
             </bookmark>
             <bookmark id="21">
                 <name/>
-                <line>545</line>
+                <line>562</line>
                 <key/>
             </bookmark>
             <bookmark id="20">
                 <name/>
-                <line>628</line>
+                <line>645</line>
                 <key/>
             </bookmark>
             <bookmark id="19">
                 <name/>
-                <line>635</line>
+                <line>652</line>
                 <key/>
             </bookmark>
         </file>
@@ -103,8 +103,11 @@
         <group>
             <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/controllers/OperatorController.php</file>
             <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/components/Router.php</file>
+            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/controllers/SiteController.php</file>
             <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/components/Redirect.php</file>
             <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/models/Operator.php</file>
+            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/models/Patient.php</file>
+            <file>file:/D:/programs/OpenServer/OpenServer/domains/localhost/components/Settings.php</file>
         </group>
     </open-files>
 </project-private>

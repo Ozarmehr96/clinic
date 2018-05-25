@@ -23,7 +23,7 @@ class Patient {
         $sql = "SELECT count(*), id_pacient, name, surname, patronymic, sex, date_of_birth, passport_num, phone, patient_card_num,"
                 . "invalidnost, adress, social_status, id_citizenship, id_region, email, snils, work_place,"
                 . "data_vidachi_pass, inn, type_medical_policy, start_medical_policy, end_medical_policy, Id_insurance_company,"
-                . "id_doctor, fixing_date, id_university FROM patient WHERE id_pacient = :id";
+                . "id_doctor, fixing_date, id_university,police_number FROM patient WHERE id_pacient = :id";
 
         $result = $connection->prepare($sql);
         $result->bindParam(":id", $id_patiet);

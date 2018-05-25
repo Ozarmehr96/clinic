@@ -27,5 +27,6 @@ return array(
     'patient'      =>  'patient/index',
     'doctor'    =>  'doctor/index',
     'management'    =>  'management/index',
+    'authorization'    =>  'site/authorization',
     ''  =>  'site/index'
 );

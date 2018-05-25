@@ -14,14 +14,13 @@
                         <li><a href="#" id="" onclick="ShowUser_Data('insurance-policy');">Страховой полис</a></li>
                         <li><a href="#" id="" onclick="ShowUser_Data('education');">Место работы/учебы</a></li>
                         <li><a href="#" id="" onclick="ShowUser_Data('documents');">Документы</a></li>
+                        <li><a href="#" id="" onclick="ShowUser_Data('security');">Безопасность</a></li>
                         <li><a href="#" id="" onclick="ShowUser_Data('patient_historty_visit');">История посещения</a></li>
                         <button type="button" class="btn btn-primary pull-right" id="zapicat" onclick="RedirectForRecord()">Записать</button>
                     </ul>
                 </div>
                 <!-- Основное содержимое модального окна -->
                 <div class="modal-body user-selected-modal-body">
-
-
                     <div id="basic-information">
                         <div class="form-group addPlaceholder">
                             <label for="selected-user-name" class="col-xs-2 control-label">Имя</label>
@@ -59,13 +58,14 @@
                             </div>
                         </div>
 
-
+                        <?php if (!preg_match('/patient/', $_SESSION['user_type'])):  ?>
                         <div class="form-group addPlaceholder">
                             <label for="selected-user-passport" class="col-xs-2 control-label">№ документа, удосверяющего личность</label>
                             <div class="col-xs-10">
                                 <input type="text" name="passport_num" class="form-control" id="selected-user-passport">
                             </div>
                         </div>
+                        <?php endif;?>
                         <div class="form-group addPlaceholder">
                             <label for="selected-user-phone" class="col-xs-2 control-label">Телефон</label>
                             <div class="col-xs-10">
@@ -100,7 +100,7 @@
                             <div class="col-xs-10">
                                 <select class="form-control" name="ss" id="selected-user-ss" required>
                                     <option value selected="selected">Не выбрано</option>
-                                   <?php  $this->FullSelectOptions("socilaStatus", "title", "id");?>
+                                   <?php  OperatorController::FullSelectOptions("socilaStatus", "title", "id");?>
                                 </select>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                             <div class="col-xs-10">
                                 <select name="id_doctor" class="form-control" name="pacientdoctor" id="selected-pacientdoctor" required>
                                    <option value selected="selected">Не выбрано</option>
-                                   <?php  $this->FillDoctorSelectOption();?>
+                                   <?php  OperatorController::FillDoctorSelectOption();?>
                                 </select>
                             </div>
                         </div>
@@ -127,7 +127,7 @@
                             <div class="col-xs-10">
                                 <select name="id_citizenship" class="form-control" id="selected-user-id_citizenship">
                                     <option value selected="selected">Не выбрано</option>
-                                   <?php  $this->FullSelectOptions("countries", "name_country", "id_country");?>
+                                   <?php  OperatorController::FullSelectOptions("countries", "name_country", "id_country");?>
                                 </select>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                             <div class="col-xs-10">
                                 <select class="form-control" name="id_region" id="selected-user-region">
                                     <option value selected="selected">Не выбрано</option>
-                                   <?php  $this->FullSelectOptions("region", "title", "id");?>
+                                   <?php  OperatorController::FullSelectOptions("region", "title", "id");?>
                                 </select>
                             </div>
                         </div>
@@ -183,7 +183,7 @@
                             <div class="col-xs-10">
                                 <select name="Id_insurance_company" id="selected-user-comp" class="form-control">
 									<option value selected="selected">Не выбрано</option>
-                                   <?php  $this->FullSelectOptions("insurance", "title", "id");?>
+                                   <?php  OperatorController::FullSelectOptions("insurance", "title", "id");?>
 								</select>
                             </div>
                         </div>
@@ -200,7 +200,7 @@
                             <div class="col-xs-10">
                                 <select class="form-control" name="id_university" id="selected-user-university">
                                     <option value selected="selected">Не выбрано</option>
-                                   <?php  $this->FullSelectOptions("university", "title", "id");?>
+                                   <?php  OperatorController::FullSelectOptions("university", "title", "id");?>
                                 </select>
                             </div>
                         </div>
@@ -212,6 +212,7 @@
                         </div>
                     </div>
                     <div id="documents">
+                        <?php if (!preg_match('/patient/', $_SESSION['user_type'])):  ?>
                         <div class="col-xs-10">
                             <div class="form-group addPlaceholder">
                                 <label for="selected-user-passportDateStart" class="">Дата выдачи документа, удосверяющего личность</label>
@@ -219,11 +220,11 @@
                                     <span class="input-group-addon">
                                         <span class="glyphicon-calendar glyphicon"></span>
                                     </span>
-
                                     <input type="date" name="data_vidachi_pass" class="form-control" id="selected-user-passportDateStart" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}">
                                 </div>
                             </div>
                         </div>
+                        <?php endif; ?>
                         <div class="col-xs-10">
                             <div class="form-group addPlaceholder">
                                 <label for="selected-user-inn" class="">ИНН (Идентификационный номер налогоплательщика)</label>
@@ -235,6 +236,25 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div id="security">
+                        <div class="alert alert-danger">
+                            <ul>
+                                <strong>Внимание!</strong>
+                                <li>
+                                    Восстановить пароль только при предъявлении паспорта
+                                </li>
+                                <li>
+                                    Для входа в систему в качестве логина используется номер амбулаторной карточки
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 id="forLogin">Логин: </h3>
+                            <h3 id="forPass"></h3>
+                            <button type="button" id="recoverPassword" class="btn btn-primary" onclick="CreatePass()">Восстановить пароль</button>
+                        </div>
+
                     </div>
                     <div id="patient_historty_visit">
                         <h2>История посещения</h2>

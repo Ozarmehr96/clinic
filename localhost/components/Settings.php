@@ -56,4 +56,19 @@ class Settings {
         mcrypt_generic_deinit($mc_d);
         echo "<br>".$decodeText;*/
     }
+    
+    /**
+     * Создание пароля. Гененирование пароля
+     * @param type $length длина
+     * @return type строка
+     */
+    public static function generatePassword($length = 12){
+        $chars = 'abdefhiknrstyz-ABDEFGHKNQRSTYZ23456789';
+        $numChars = strlen($chars);
+        $string = '';
+        for ($i = 0; $i < $length; $i++) {
+            $string .= substr($chars, rand(1, $numChars) - 1, 1);
+        }
+        return  count_chars($string, 3);
+    }
 }

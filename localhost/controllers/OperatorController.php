@@ -14,9 +14,9 @@ require_once (ROOT.'\controllers\PatientController.php');
 class OperatorController extends Redirect {
     
     public function __construct() {
-        
         parent::__construct("operator");
-       // print_r($_SESSION);
+        $userType = $_SESSION['user_type'];
+        //Settings::generatePassword();
         return true;
     }
     public function actionIndex()
@@ -66,6 +66,7 @@ class OperatorController extends Redirect {
             $values['email'] = htmlspecialchars($_POST['email']);
             $values['type_medical_policy'] = htmlspecialchars($_POST['type_medical_policy']);
             $values['snils'] = htmlspecialchars($_POST['snils']);
+            $values['police_number'] = htmlspecialchars($_POST['police_number']);
             $values['work_place'] = htmlspecialchars($_POST['work_place']);
             $values['data_vidachi_pass'] = htmlspecialchars($_POST['data_vidachi_pass']);
             $values['inn'] = htmlspecialchars($_POST['inn']);
@@ -126,17 +127,18 @@ class OperatorController extends Redirect {
             $values['sex'] = htmlspecialchars($_POST['sex']);
             $values['date_of_birth'] = htmlspecialchars($_POST['date_of_birth']);
             $values['phone'] = htmlspecialchars($_POST['phone']);
-            $values['passport_num'] = htmlspecialchars($_POST['passport_num']);
+            if(isset($_POST['passport_num'])) $values['passport_num'] = htmlspecialchars($_POST['passport_num']);
             $values['patient_card_num'] = htmlspecialchars($_POST['patient_card_num']);
             $values['invalidnost'] = htmlspecialchars($_POST['invalidnost']);
             $values['adress'] = htmlspecialchars($_POST['adress']);
+            $values['police_number'] = htmlspecialchars($_POST['police_number']);
             $values['id_citizenship'] = htmlspecialchars($_POST['id_citizenship']);
             $values['id_region'] = htmlspecialchars($_POST['id_region']);
             $values['email'] = htmlspecialchars($_POST['email']);
             $values['type_medical_policy'] = htmlspecialchars($_POST['type_medical_policy']);
             $values['snils'] = htmlspecialchars($_POST['snils']);
             $values['work_place'] = htmlspecialchars($_POST['work_place']);
-            $values['data_vidachi_pass'] = htmlspecialchars($_POST['data_vidachi_pass']);
+            if(isset($_POST['data_vidachi_pass'])) $values['data_vidachi_pass'] = htmlspecialchars($_POST['data_vidachi_pass']);
             $values['inn'] = htmlspecialchars($_POST['inn']);
             $values['start_medical_policy'] = htmlspecialchars($_POST['start_medical_policy']);
             $values['end_medical_policy'] = htmlspecialchars($_POST['end_medical_policy']);
@@ -146,6 +148,7 @@ class OperatorController extends Redirect {
             $values['id_university'] = htmlspecialchars($_POST['id_university']);
             $values['id_added_operator'] = $_SESSION['user_id'];
             $result = Operator::UpdatePatientData($values);
+            
             if ($result != NULL)
             {
                  header("Location: /");
@@ -162,6 +165,20 @@ class OperatorController extends Redirect {
     
     public function actionPatients()
     {
+        if(isset($_POST['createpass']))
+        {
+            $patientID = $_POST['userid'];
+            $generText = "";
+            $result = "";
+            do{
+                $generText = Settings::generatePassword();
+                $result = Operator::CheckIsExistsPasswd($generText);
+            }
+            while ($result !=0);
+            $insertRes = Operator::UpdateUserPass($generText,$patientID);
+            echo $generText;
+            exit();
+        }
         if(isset($_POST['getMaxPatientId']))
         {
             $maxIdFromPatientTable = Operator::getMaxIDFromPatientTable();
