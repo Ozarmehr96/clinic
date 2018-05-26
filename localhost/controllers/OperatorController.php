@@ -329,10 +329,10 @@ class OperatorController extends Redirect {
                        else
                        {
                             $error = "'Ошибка'";
-                            $errorText = "'Доктор уже занят занят'";
+                            $errorText = "'Доктор уже занят'";
                            $isBusyDoctorAlert = 'onclick="OpenWarningModal('.$error.', '.$errorText.')"';
                            $timePriem = '<td id="timeZapic" '.$isBusyDoctorAlert.'>' . $keyofTimes . '</td>';
-                            $tr = '<tr>';
+                            $tr = '<tr style="background-color:#e49898">';
                        }
                            
                          $notes = '<td data-id="">'.$notess.'</td>';
@@ -474,8 +474,10 @@ class OperatorController extends Redirect {
             $date = $_POST['date'];
             $doctorId = $_POST['id_doctor'];
             //echo $this->FillSelectOptionsWithDoctorTimeWork($doctorId, $date);
-            echo $this->FillSelectOptionsWithDoctorTimeWork($doctorId, $date);
-            return;
+            if($this->FillSelectOptionsWithDoctorTimeWork($doctorId, $date) == FALSE) echo '0';
+             else echo  $this->FillSelectOptionsWithDoctorTimeWork($doctorId, $date);
+            
+exit();
         }
         
         
@@ -674,44 +676,46 @@ class OperatorController extends Redirect {
         $doctorDatas = Operator::getDoctorSchedule($id_doctor, $date);
         $workTimeOfDoctorById =  Operator::getScheduleOfDoctorByIDInBD($id_doctor);
         $text = $workTimeOfDoctorById['schedule'];
-        $callBack = array("OperatorController","MyCallBackFunction");
-        $TimesInArray = array();
-        $TimesInArray = PatientController::SheduleOfDoctors($text, $date, $callBack,1);
-        if ($doctorDatas == NULL) {
-            echo '<option value="">Не выбрано</option>';
-            PatientController::SheduleOfDoctors($text, $date,function($array){}, function($time){
+        
+        $date = $date;
+        $id_doctor = $id_doctor;
+        $isDoctorWork = OperatorController::CheckIsDoctorWorkOnSunday($date, $id_doctor);
+       if ($isDoctorWork == true)
+        {
+            $callBack = array("OperatorController","MyCallBackFunction");
+            $TimesInArray = array();
+            $TimesInArray = PatientController::SheduleOfDoctors($text, $date, $callBack,1);
+            
+            if ($doctorDatas == NULL) {
+                echo '<option value="">Не выбрано</option>';
+                PatientController::SheduleOfDoctors($text, $date, function($array) {
+                    
+                }, function($time) {
                     echo '<option>' . $time->format('H:i:s') . '</option>';
                 });
-            
-            
-            
-            
-            /*for ($i = 8; $i < 18; $i++) {
-                for ($j = 0; $j < 60; $j += 15) {
-                    $time = new DateTime();
-                    $time->setTime($i, $j, 00);
-                    echo '<option>' . $time->format('H:i:s') . '</option>';
-                }
-            }*/
-        } else {
-            echo '<option value="">Не выбрано</option>';
-            foreach ($TimesInArray as $keyofTimes => $valOfTimes) {
-                $arrayOf = array();
-                foreach ($doctorDatas as $valofDoctorSchedule) {
-                    // если тек. время == время записи пациента
-                    if ($valofDoctorSchedule['time_priema'] == $keyofTimes) { // Если есть запись и время приема != тек.время в массиве
-                        $arrayOf[$keyofTimes] = ""; // создадим массив для хранения времени когда он занят
-                    } else {
-                        continue;
+            } else {
+                echo '<option value="">Не выбрано</option>';
+                foreach ($TimesInArray as $keyofTimes => $valOfTimes) {
+                    $arrayOf = array();
+                    foreach ($doctorDatas as $valofDoctorSchedule) {
+                        // если тек. время == время записи пациента
+                        if ($valofDoctorSchedule['time_priema'] == $keyofTimes) { // Если есть запись и время приема != тек.время в массиве
+                            $arrayOf[$keyofTimes] = ""; // создадим массив для хранения времени когда он занят
+                        } else {
+                            continue;
+                        }
+                    }
+
+                    if (!array_key_exists($keyofTimes, $arrayOf)) { // если не занят то выводим, то есть если индекс $TimesInArray!= индекс $arrayOf
+                        echo '<option>' . $keyofTimes . '</option>';
                     }
                 }
-                
-                if (!array_key_exists($keyofTimes, $arrayOf)) { // если не занят то выводим, то есть если индекс $TimesInArray!= индекс $arrayOf
-                    echo '<option>' . $keyofTimes . '</option>';
-                }
+                echo '<option>' . $keyofTimes . '</option>';
             }
         }
-        return TRUE;
+        else {
+            return FALSE;
+        }
     }
     
     public static function getAllDoctorsSchedule()
@@ -721,18 +725,24 @@ class OperatorController extends Redirect {
         foreach ($scheduleList as $item)
         {
             $day = explode(",", $item['schedule']);
-            if(isset($day[5])) $day5 = $day[5];
-            else $day5 = "";
+           /* if(isset($day[5])) $day5 = $day[5];
+            else $day5 = "";*/
+            for ($index = 0; $index < 6;$index++)
+            {
+                if ($day[$index] == 'no') {
+                    $day[$index] = '';
+                }
+            }
             echo '<tr>'
                     . '<td>'.$item['title'].'</td>'
-                    . '<td data="'.$item['id_doctor'].'">'.$item['fio'].'</td>'
+                    . '<td data="'.$item['id_doctor'].'">'.$item['fio'].' </td>'
                     . '<td>'.$item['cabinet'].'</td>'
                     . '<td>'.$day[0].'</td>'
                     . '<td>'.$day[1].'</td>'
                     . '<td>'.$day[2].'</td>'
                     . '<td>'.$day[3].'</td>'
                     . '<td>'.$day[4].'</td>'
-                    . '<td>'.$day5.'</td>'
+                    . '<td>'.$day[5].'</td>'
                 . '</tr>';
         }
     }

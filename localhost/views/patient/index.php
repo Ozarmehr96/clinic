@@ -104,4 +104,5 @@
 <?php include_once(ROOT."/views/modalBoxs/ConfirmModals/RemoveModal.php");?>
 <?php include_once(ROOT."/views/modalBoxs/UpdateZapicModal.php");?>
 <?php include_once(ROOT."/views/modalBoxs/ConfirmModals/WarrningModal.php");?>
+<?php include_once(ROOT."/views/modalBoxs/DoctorScheduleViewModal.php");?>
 <?php include_once(ROOT."/views/layouts/patient_footer.php");?>

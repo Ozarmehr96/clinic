@@ -15,7 +15,7 @@
                         <li><a href="#" id="" onclick="ShowUser_Data('education');">Место работы/учебы</a></li>
                         <li><a href="#" id="" onclick="ShowUser_Data('documents');">Документы</a></li>
                         <li><a href="#" id="" onclick="ShowUser_Data('security');">Безопасность</a></li>
-                        <li><a href="#" id="" onclick="ShowUser_Data('patient_historty_visit');">История посещения</a></li>
+                        <li><a href="#" id="patient_historty_visitA" onclick="ShowUser_Data('patient_historty_visit');">История посещения</a></li>
                         <button type="button" class="btn btn-primary pull-right" id="zapicat" onclick="RedirectForRecord()">Записать</button>
                     </ul>
                 </div>

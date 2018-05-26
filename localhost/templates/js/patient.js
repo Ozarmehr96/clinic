@@ -32,12 +32,13 @@ function GetPatientRecord() {
 function GetRecordList() {
     $("#recordList").empty();
     GetPatientRecord();
+    $("#recordList").trigger('change'); // способ инициализирования
 }
 GetRecordList();
 
+/*! Запись к врачу пациентом */
 function PatientOwnRecord(elem) {
     patientForUpdateRecordID = $(elem).data("id");
-    alert(patientForUpdateRecordID);
     ChangeFormActionByClassName("#updaterecordPatientForm", "/patient/gets");
     ClearModalFormInputs("updaterecordPatientForm");
     $("#updaterecordPacientModalTitle").text("Запись к врачу");

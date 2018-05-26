@@ -1197,8 +1197,6 @@ function SpecialityChangeFun(elem) {
     }
 }
 
-
-
 function DoctorChangeFun(elem) {
     $("#updatenachaloPriema").val("");
     var date = $("#updatedatetimepickerZapicDataPriema").val();
@@ -1286,7 +1284,6 @@ function FillSelectionOptiontWithDoctorBySpeciality(speciality_id, selectedOptio
             var myObj = this.responseText;
             $("#doctors").append(myObj);
             $("#doctors").val(selectedOption);
-            console.log(myObj);
         }
     };
     xhttp.send("fillDoctorBySpeciality=1&speciality_id=" + encodeURIComponent(speciality_id));
@@ -1312,10 +1309,6 @@ function FillSelectOptionsWithDoctorTimeWork(id_doctor, date, timePriemaOld) {
             SortSelectOptionsByText("updatenachaloPriema");
             $('#updatenachaloPriema option[value=""]').insertBefore('#updatenachaloPriema option:first');
             $('#updatenachaloPriema').val(timePriemaOld);
-            console.log(myObj);
-            //Перемешение "Не выбрано" в начало
-
-
         }
     };
     xhttp.send("filldoctorwithtimes=1&date=" + encodeURIComponent(date) + "&id_doctor=" + encodeURIComponent(id_doctor));
@@ -1330,10 +1323,15 @@ function FillSelectOptionsWithDoctorTimeWorkWithouotAttrSelect(id_doctor, date) 
         if (this.readyState == 4 && this.status == 200) {
             $("#updatenachaloPriema option").remove();
             var myObj = this.responseText;
-            $("#updatenachaloPriema").append(myObj);
-            SortSelectOptionsByText("updatenachaloPriema");
-            $('#updatenachaloPriema').val("");
-            console.log(myObj);
+            if (myObj == '0') {
+                OpenWarningModal("Ошибка", "Доктор не работает в указанный день");
+                $("#updatenachaloPriema option").remove();
+                $("#updatenachaloPriema").append("<option value selected>Не выбрано</option>");
+            } else {
+                $("#updatenachaloPriema").append(myObj);
+                SortSelectOptionsByText("updatenachaloPriema");
+                $('#updatenachaloPriema').val("");
+            }
         }
     };
     xhttp.send("filldoctorwithtimes=1&date=" + encodeURIComponent(date) + "&id_doctor=" + encodeURIComponent(id_doctor));
@@ -1355,35 +1353,10 @@ function SortSelectOptionsByText(selectID) {
         return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0;
     });
     options.each(function (i, o) {
-        console.log(i);
         o.value = arr[i].v;
         $(o).text(arr[i].t);
     });
 }
-/*function myobject() {
-	this.value = 5;
-}
-var o = new myobject();
-alert(o.value); // o.value = 5
-function objectchanger(fnc) {
-	fnc.value = 6;
-}
-objectchanger(o);
-alert(o.value); // o.value is now equal to 6*/
-
-/*var xhttp = new XMLHttpRequest();
-xhttp.open("POST", "/operator/patients", true);
-xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-xhttp.onreadystatechange = function () {
-	if (this.readyState == 4 && this.status == 200) {
-		var myObj = JSON.parse(this.responseText);
-
-		$("#selected-user-name").val(myObj.name); 
-	}
-};
-xhttp.send("id=" + encodeURIComponent(get_pacient_data_id_from_table));*/
-//document.addEventListener('contextmenu', event => event.preventDefault());
-
 
 /*!
  * Метод для установки времени по умолчанию, то есть для вставки собственной даты
@@ -1431,13 +1404,17 @@ function ViewСertainDoctorSchedule(elem) {
             $("#cabinetViewDoctorShedule").text(cabinet);
             var schedule = myObj.schedule;
             var days = schedule.split(",");
+            for (i = 0; i < 6; i++) {
+                if (days[i] == 'no') {
+                    days[i] = '';
+                }
+            }
             $("#days0").text(days[0]);
             $("#days1").text(days[1]);
             $("#days2").text(days[2]);
             $("#days3").text(days[3]);
             $("#days4").text(days[4]);
             $("#days5").text(days[5]);
-            console.log(this.responseText);
         }
     };
     xhttp.send("doctorView=true&id=" + encodeURIComponent(doctorID));

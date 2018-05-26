@@ -158,7 +158,7 @@ class PatientController extends Redirect {
         {
             $id_patient = $this->patientID;
             $recordList = array();
-            $recordList = Patient::getUserRecords("3");
+            $recordList = Patient::getUserRecords($id_patient);
             $index =1;
             foreach ($recordList as $record)
             {
@@ -170,10 +170,10 @@ class PatientController extends Redirect {
                         . '<td>'.$index++.'</td>'
                         . '<td>'.$record['date_priema'].'</td>'
                         . '<td>'.$record['time_priema'].'</td>'
-                        . '<td>'.$doctorFIO.'</td>'
+                        . '<td class="canClick" onclick="ViewСertainDoctorSchedule(this)" data-id="'.$record['id_doctor'].'">'.$doctorFIO.'</td>'
                         . '<td>'.$titleOfUSlugi.'</td>'
                         . '<td>'.$record['cost'].'</td>'
-                        . '<td>'.$record['notes'].'</td>'
+                        . '<td>'.$record['notes'].'</td>'  
                         . '<td class="optionTD" id = "actionTD">'.$option.'</td>'
                 . '</tr>';
             }

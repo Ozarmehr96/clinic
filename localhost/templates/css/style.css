@@ -271,7 +271,6 @@ td {
 
 #patientModalDatasHeader {
     border-bottom-color: white;
-    padding-bottom: 0px;
 }
 
 .user-selected-modal-body {
@@ -439,6 +438,28 @@ td {
     /*#0061ff*/
 }
 
+.table-striped>tbody>tr:nth-of-type(odd):hover {
+    background-color: #4f92ff;
+    color: white;
+    cursor: pointer;
+}
+
+.table-striped>tbody>tr:hover {
+    background-color: #4f92ff;
+    color: white;
+    cursor: pointer;
+}
+
+.danger:hover>.canClick:hover {
+    color: white;
+    background: #01579b;
+    cursor: pointer;
+}
+
+.danger:hover>td:hover {
+    color: black;
+}
+
 .alert-div {
     position: fixed;
     bottom: 0;
@@ -509,4 +530,8 @@ td {
 
 #butPassAndPrint {
     display: flex;
+}
+
+#patient_historty_visitA {
+    padding-left: 10px;
 }
