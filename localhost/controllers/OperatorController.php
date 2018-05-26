@@ -16,7 +16,6 @@ class OperatorController extends Redirect {
     public function __construct() {
         parent::__construct("operator");
         $userType = $_SESSION['user_type'];
-        //Settings::generatePassword();
         return true;
     }
     public function actionIndex()
@@ -267,76 +266,98 @@ class OperatorController extends Redirect {
         
         
         if (isset($_POST['scheduleSubmit'])) {
+            
             $date = $_POST['date'];
             $id_doctor = $_POST['id_doctor'];
+            $isDoctorWork = $this->CheckIsDoctorWorkOnSunday($date, $id_doctor);
+            if ($isDoctorWork == true)
+            {
+                $doctorSchedule = array();
+                $doctorSchedule = Operator::getDoctorSchedule($id_doctor,$date);
+                $res = "";
 
-            $doctorSchedule = array();
-            $doctorSchedule = Operator::getDoctorSchedule($id_doctor,$date);
-            $res = "";
-            
-            // 1. Нам нужно получить номер дня в недели
-            // $numbeyDayInWeek = PatientController::getNumberDayOfWeek($date);  
-             
-            // 2. Получить расписание определенного доктора в текстовом виде
-            $workTimeOfDoctorById =  Operator::getScheduleOfDoctorByIDInBD($id_doctor);
-            $text = $workTimeOfDoctorById['schedule'];
-            $callBack = array("OperatorController","MyCallBackFunction");
-            $TimesInArray = array();
-            $TimesInArray = PatientController::SheduleOfDoctors($text, $date, $callBack,1);
-           if ($doctorSchedule == NULL) 
-            {
-                PatientController::SheduleOfDoctors($text, $date,function($array){}, function($time){
-                    echo '<tr id="timeZapic" onclick="ZapicPatient(this)" data-id="">'
-                        . '<td>' . $time->format('H:i:s') . '</td>'
-                        . '<td data-id=""></td>'
-                        . '<td data-id=""></td>'
-                        . '<td data-id=""></td>'
-                        . '</tr>';
-                });
-            } 
-           else 
-            {
-                $fioPatient = "";
-                $patient_id = "";
-                $notess = "";
-                
-                foreach ($TimesInArray as $keyofTimes => $valOfTimes) {
+                // 1. Нам нужно получить номер дня в недели
+                // $numbeyDayInWeek = PatientController::getNumberDayOfWeek($date);  
+
+                // 2. Получить расписание определенного доктора в текстовом виде
+                $workTimeOfDoctorById =  Operator::getScheduleOfDoctorByIDInBD($id_doctor);
+                $text = $workTimeOfDoctorById['schedule'];
+                $callBack = array("OperatorController","MyCallBackFunction");
+                $TimesInArray = array();
+                $TimesInArray = PatientController::SheduleOfDoctors($text, $date, $callBack,1);
+               if ($doctorSchedule == NULL) 
+                {
+                    PatientController::SheduleOfDoctors($text, $date,function($array){}, function($time){
+                        echo '<tr id="timeZapic" onclick="ZapicPatient(this)" data-id="">'
+                            . '<td>' . $time->format('H:i:s') . '</td>'
+                            . '<td data-id=""></td>'
+                            . '<td data-id=""></td>'
+                            . '<td data-id=""></td>'
+                            . '</tr>';
+                    });
+                } 
+               else 
+                {
+                    $fioPatient = "";
+                    $patient_id = "";
                     $notess = "";
-                    $option = '<td data-id=""></td>';
-                    foreach ($doctorSchedule as $valofDoctorSchedule) {
-                        $fioPatient = $valofDoctorSchedule['surname']." ".$valofDoctorSchedule['name']." ".$valofDoctorSchedule['patronymic'];
-                        // если тек. время == время записи пациента
-                        if ($valofDoctorSchedule['time_priema'] == $keyofTimes) {
-                            $valOfTimes = '<td class = "canClick" onclick = "ShowUserDatasOnModal(this)" data-id="' . $valofDoctorSchedule['id_pacient'] . '">' . $fioPatient. '</td>';
-                            $patient_id = $valofDoctorSchedule['id_pacient'];
-                            $notess = $valofDoctorSchedule['notes'];
-                            $option = '<td class="optionTD" id = "actionTD">'
-                                        . '<span class="glyphicon glyphicon-edit" aria-hidden="true" style="color:#ffc107" onclick="UpdateRecordedPatient(this)" data-patient_id="'.$valofDoctorSchedule['id_pacient'].'" data-doctor_id="'.$valofDoctorSchedule['id_doctor'].'" data-id_schedule="'.$valofDoctorSchedule['id_schedule'].'" ></span>&emsp;'
-                                        . '<span class="glyphicon glyphicon-remove-circle" aria-hidden="true" onclick="RemoveZapicById(this)" data-id="'.$valofDoctorSchedule['id_schedule'].'" style="color:red"></span>'
-                                    . '</td>';
+
+                    foreach ($TimesInArray as $keyofTimes => $valOfTimes) {
+                        $notess = "";
+                        $option = '<td data-id=""></td>';
+                        foreach ($doctorSchedule as $valofDoctorSchedule) {
+                            $fioPatient = $valofDoctorSchedule['surname']." ".$valofDoctorSchedule['name']." ".$valofDoctorSchedule['patronymic'];
+                            // если тек. время == время записи пациента
+                            if ($valofDoctorSchedule['time_priema'] == $keyofTimes) {
+                                $valOfTimes = '<td class = "canClick" onclick = "ShowUserDatasOnModal(this)" data-id="' . $valofDoctorSchedule['id_pacient'] . '">' . $fioPatient. '</td>';
+                                $patient_id = $valofDoctorSchedule['id_pacient'];
+                                $notess = $valofDoctorSchedule['notes'];
+                                $option = '<td class="optionTD" id = "actionTD">'
+                                            . '<span class="glyphicon glyphicon-edit" aria-hidden="true" style="color:#ffc107" onclick="UpdateRecordedPatient(this)" data-patient_id="'.$valofDoctorSchedule['id_pacient'].'" data-doctor_id="'.$valofDoctorSchedule['id_doctor'].'" data-id_schedule="'.$valofDoctorSchedule['id_schedule'].'" ></span>&emsp;'
+                                            . '<span class="glyphicon glyphicon-remove-circle" aria-hidden="true" onclick="RemoveZapicById(this)" data-id="'.$valofDoctorSchedule['id_schedule'].'" style="color:red"></span>'
+                                        . '</td>';
+                            }
                         }
+                        $tr = "";
+                        $timePriem = "";
+                       if ($valOfTimes == "")
+                       {
+                           $tr = '<tr id="timeZapic" onclick="ZapicPatient(this)">';
+                           $valOfTimes = '<td data-id=""></td>';
+                           $timePriem = '<td id="timeZapic" onclick="ZapicPatient(this)">' . $keyofTimes . '</td>';
+                       }
+                       else
+                       {
+                            $error = "'Ошибка'";
+                            $errorText = "'Доктор уже занят занят'";
+                           $isBusyDoctorAlert = 'onclick="OpenWarningModal('.$error.', '.$errorText.')"';
+                           $timePriem = '<td id="timeZapic" '.$isBusyDoctorAlert.'>' . $keyofTimes . '</td>';
+                            $tr = '<tr>';
+                       }
+                           
+                         $notes = '<td data-id="">'.$notess.'</td>';
+                        
+                         //$isBusyDoctorAlert = 'onclick="OpenWarningModal("Ошибка", "Доктор уже занят занят")"';
+                       // $timePriem = '<td id="timeZapic" onclick="ZapicPatient(this)" data-id="'.$patient_id.'">' . $keyofTimes . '</td>';
+                        //if ($valOfTimes == "") $valOfTimes = $timePriem;
+                        //$TimesInArray[$keyofTimes] = $valOfTimes;  // хранить в тек. время ФИО пользователя
+                       //echo $keyofTimes . "=>" . $valOfTimes . "<br>";
+
+                        echo $tr
+                                . $timePriem
+                                . $valOfTimes
+                                . $notes
+                                . $option
+                             .'</tr>';
                     }
-                    
-                   if ($valOfTimes == "") $valOfTimes = '<td data-id=""></td>';
-                     $notes = '<td data-id="">'.$notess.'</td>';
-                    $timePriem = '<td id="timeZapic" onclick="ZapicPatient(this)" data-id="'.$patient_id.'">' . $keyofTimes . '</td>';
-                    //if ($valOfTimes == "") $valOfTimes = $timePriem;
-                    //$TimesInArray[$keyofTimes] = $valOfTimes;  // хранить в тек. время ФИО пользователя
-                   //echo $keyofTimes . "=>" . $valOfTimes . "<br>";
-                    
-                    echo '<tr>'
-                            . $timePriem
-                            . $valOfTimes
-                            . $notes
-                            . $option
-                         .'</tr>';
                 }
             }
-            return;
+            else {
+                echo '<script>OpenWarningModal("Ошибка", "Доктор не работает в указанный день");</script>';
+            }
+            
+            exit();
         }
-        
-        
-        
         require ROOT.'/views/operator/registerjournal.php';
         return TRUE;
     }
@@ -714,5 +735,25 @@ class OperatorController extends Redirect {
                     . '<td>'.$day5.'</td>'
                 . '</tr>';
         }
+    }
+    
+    /**
+     *  Проверяем, работает ли доктор в указанный день
+     * @param type $date
+     * @param type $id
+     * @return boolean
+     */
+    public static function CheckIsDoctorWorkOnSunday($date, $id)
+    {
+        $isWork ="";
+        $schedule = Operator::getScheduleOfDoctorByIDInBD($id);
+        $numberDayInWeek = PatientController::getNumberDayOfWeek($date);
+        $days = explode(",", $schedule['schedule']);
+        if(preg_match('/no/',$days[$numberDayInWeek-1]))
+        {
+            $isWork= FALSE;
+        }
+        else $isWork = true;
+        return $isWork;
     }
 }

@@ -33,9 +33,9 @@
                     </div>
                     <div class="col-xs-6" id="">
                         <div class="form-group">
-                            <label for="pacientpassportnumber" class="">Номер паспорта</label>
+                            <label for="pacientpassportnumber" class="">Номер полиса</label>
                             <div class="input-group date">
-                                <input type="text" name="passportNum" class="form-control" id="pacientpassportnumber" placeholder="Номер паспорта" required="required">
+                                <input type="text" name="passportNum" class="form-control" id="pacientpassportnumber" placeholder="Номер медицинского полиса страхования" required="required" data-toggle="tooltip" title="" data-original-title="Номер медицинского полиса страхования">
                                 <span class="input-group-addon">
                                     <span class="glyphicon">№</span>
                                 </span>
@@ -46,7 +46,7 @@
                         <div class="form-group">
                             <label for="date_born_record_pacient" class="">Номер карты</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="medicine-cart-number" name="medicineCartNum" data-toggle="tooltip" title="" placeholder="Номер карты" data-original-title="Номер медицинской карты пациента">
+                                <input type="text" class="form-control" id="medicine-cart-number" name="medicineCartNum" data-toggle="tooltip" title="" placeholder="Номер карты" data-original-title="Номер амбулаторной карточки пациента">
                                 <span class="input-group-addon">
                                     <span class="glyphicon">№</span>
                                 </span>

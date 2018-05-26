@@ -22,10 +22,11 @@ class Site {
         $connection = Db::getConnection();
         
         $sql = "SELECT count(*), id_pacient, type FROM patient JOIN user_type ON user_type.id = patient.user_type"
-                . " WHERE login = :login and password = :password";
+                . " WHERE login = :login OR patient_card_num =:pat and password = :password";
         $result = $connection->prepare($sql);
         
         $result->bindParam(":login", $login, PDO::PARAM_STR);
+        $result->bindParam(":pat", $login, PDO::PARAM_STR);
         $result->bindParam(":password", $password, PDO::PARAM_STR);
         $result->execute();
         

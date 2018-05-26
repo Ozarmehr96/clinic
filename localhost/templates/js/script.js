@@ -24,7 +24,6 @@ $(document).ready(function () {
     });
     $('table tbody tr').click(function (event) {
         $(this).addClass('highlight').siblings().removeClass('highlight');
-        console.log("we");
     });
     /*!
      * 	Событие при изменение даты приема (При редактирование записи)
@@ -63,7 +62,6 @@ $(document).ready(function () {
         }, 0);
 
     });
-
     $("#selectedPacientModalBox").on('show.bs.modal', function () {
         $(this).css("overflow-y", "hidden");
     });
@@ -148,8 +146,8 @@ $(document).ready(function () {
             stepping: 10,
             format: 'DD-MM-YYYY',
             //defaultDate: moment().toDate(),
-            //minDate: moment().toDate(),
-            daysOfWeekDisabled: [6, 0]
+            minDate: moment().toDate(),
+            daysOfWeekDisabled: [0]
         });
     });
     $("#medicine-cart-number").tooltip();
@@ -228,7 +226,9 @@ $(document).ready(function () {
     //	*********** Вкладка журнал регистрации ***********************************
 
     // Функция добавления класс актив для выбранного врача
-    $(".doctor-pills-name").click(function () {
+    $(".doctor-pills-name").click(function (e) {
+        if (e.target.nodeName !== "A")
+            return;
         $(".menu-second-level").each(function () {
             $("li").removeClass('active-second-level');
         });
@@ -277,19 +277,7 @@ var Authorization = function () {
         }
     });
     return rowCount;
-
-    /* var xhttp = new XMLHttpRequest();
-     xhttp.open("POST", "/authorization", true);
-     xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-     xhttp.onreadystatechange = function () {
-         if (this.readyState == 4 && this.status == 200) {
-             var result = this.responseText;
-             callback(result);
-         }
-     };
-     xhttp.send("authorization=true&login=" + encodeURIComponent(login) + "&password=" + encodeURIComponent(pass));*/
 };
-
 
 /*!
  * Очистка полей формы
@@ -492,8 +480,11 @@ var selectedPatient;
 function ShowUserDatasOnModal(elem) {
     ActivateFirstLiOfPatientModal();
     $("#forPass").empty();
+    $("#forTimer").empty();
+    clearTimeout(timer);
     // $("#id_doctor option:first").attr("selected", "selected");
     $("#remove-patient-button").css("display", "inline-block");
+    $("#printPassword").css("display", "none");
     var get_pacient_data_id_from_table = "";
     var visibleZapisatButton = "";
     get_pacient_data_id_from_table = $(elem).data("id");
@@ -572,9 +563,25 @@ function CreatePass() {
         if (this.readyState == 4 && this.status == 200) {
             var result = this.responseText;
             $("#forPass").text("Пароль: " + result);
+            Timer(120, "#forTimer");
+
         }
     };
     xhttp.send("createpass=true&userid=" + encodeURIComponent(selectedPatient));
+}
+var timer = "";
+
+function Timer(seconds, inputIdORClass) {
+    $(inputIdORClass).text("Пароль исчезнет через " + seconds + " сек...");
+    $("#printPassword").css("display", "block");
+    seconds--;
+    timer = setTimeout('Timer(' + seconds + ',"' + inputIdORClass + '")', 1000);
+    if (seconds < -1) {
+        clearTimeout(timer);
+        $(inputIdORClass).empty();
+        $("#forPass").empty();
+        $("#printPassword").css("display", "none");
+    }
 }
 
 
@@ -783,7 +790,7 @@ function ZapicPatient(elem) {
                         } else {
                             var fullname = myObj.surname + " " + myObj.name + " " + myObj.patronymic; //Основные сведения
                             $("#patient-fio").val(fullname);
-                            $("#pacientpassportnumber").val(myObj.passport_num);
+                            $("#pacientpassportnumber").val(myObj.police_number);
                             $("#medicine-cart-number").val(myObj.patient_card_num);
                             console.log(myObj.id_pacient);
                             var patientIDEn = myObj.id_pacient;
@@ -800,7 +807,6 @@ function ZapicPatient(elem) {
     } else {
         GetUSerdatasByIdAndSetDatasToModalZapisInputs(idOfSelectedPatientFromSearch);
     }
-
 }
 
 /*!
@@ -955,7 +961,15 @@ function ShowDoctorSchedule(elem) {
     }
 
 }
-
+/*!
+ *  Событие при нажатии на ФИО доктора для получении расписание выбранного доктора
+ * Метод находится выше ShowDoctorSchedule
+ */
+$(".doctor-pills-name").click(function (e) {
+    if (e.target.nodeName !== "A")
+        return;
+    ShowDoctorSchedule(this);
+});
 //*!********************************  CONFIRM MODALS				***************************************
 function OpenWarningModal(title, comments) {
     $("#warning-modal").modal('show');
@@ -1428,10 +1442,13 @@ function ViewСertainDoctorSchedule(elem) {
     };
     xhttp.send("doctorView=true&id=" + encodeURIComponent(doctorID));
     $("#doctorScheduleModalBox").modal('show');
-
 }
 
-
+function AlertDoctorIsNotWork() {
+    if (e.target !== this)
+        return;
+    OpenWarningModal("Ошибка", "Доктор не работает в указанный день");
+}
 
 /* if(time() - $_SESSION['timestamp'] > 900) { //subtract new timestamp from the old one
     echo"<script>alert('15 Minutes over!');</script>";

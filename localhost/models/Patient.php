@@ -36,7 +36,7 @@ class Patient {
     public static function getPatientByPassportAndMedicineCart($passport, $medicineCartNum)
     {
         $connection = Db::getConnection();
-        $sql = "SELECT*FROM patient WHERE passport_num = :passport_num OR patient_card_num = :patient_card_num";
+        $sql = "SELECT*FROM patient WHERE police_number = :passport_num OR patient_card_num = :patient_card_num";
         $result = $connection->prepare($sql);
         $result->bindParam(":passport_num", $passport);
         $result->bindParam(":patient_card_num", $medicineCartNum);

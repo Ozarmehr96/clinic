@@ -270,6 +270,12 @@ class Operator {
         }
         return $values;
     }
+    
+    /**
+     *  Получение расписании определенного доктора
+     * @param type $id_doctor
+     * @return type
+     */
     public static function getScheduleOfDoctorByIDInBD ($id_doctor)
     {
         $connection = Db::getConnection();

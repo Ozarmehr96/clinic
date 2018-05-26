@@ -238,6 +238,7 @@
                         </div>
                     </div>
                     <div id="security">
+                        <?php if (!preg_match('/patient/', $_SESSION['user_type'])):  ?>
                         <div class="alert alert-danger">
                             <ul>
                                 <strong>Внимание!</strong>
@@ -252,9 +253,34 @@
                         <div>
                             <h3 id="forLogin">Логин: </h3>
                             <h3 id="forPass"></h3>
-                            <button type="button" id="recoverPassword" class="btn btn-primary" onclick="CreatePass()">Восстановить пароль</button>
+                            <h4 id="forTimer"></h4>
+                            <div id="butPassAndPrint">
+                                <button type="button" id="recoverPassword" class="btn btn-success" onclick="CreatePass()">Создать или восстановить пароль</button>
+                                <button type="button" id="printPassword" class="btn btn-primary" onclick="PrintPass()">Распечатать пароль</button>
+                            </div>
                         </div>
-
+                        <?php else: ?>
+                        <div class="alert alert-danger">
+                            <ul>
+                                <strong>Внимание!</strong>
+                                <li>
+                                    Для восстановлении пароля необходимо обратиться в поликлнику к любому из сотрудников регистратуры
+                                </li>
+                                <li>
+                                    Пароль можно восстановить только при предъявлении документа удостворяющего личности
+                                </li>
+                                <li>
+                                    Для входа в систему в качестве логина используется номер амбулаторной карточки
+                                </li>
+                                <li>
+                                    Для безопсности Ваших личных данных, в системе не используется cookie
+                                </li>
+                                <li>
+                                    В случае не активности более 600 секунд, необходимо заново пройти авторизацию
+                                </li>
+                            </ul>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <div id="patient_historty_visit">
                         <h2>История посещения</h2>

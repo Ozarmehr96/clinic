@@ -95,6 +95,7 @@
     border-top-right-radius: 0px;
 }
 
+#security,
 #education,
 #documents,
 #authorization,
@@ -179,6 +180,14 @@
 }
 
 .menu-second-level li>a:hover {
+    background-color: #2d74ab;
+    color: white;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background: #2d74ab;
+}
+
+.menu-second-level li>i:hover .menu-second-level li>a {
     background-color: #2d74ab;
     color: white;
     border-top-left-radius: 10px;
@@ -440,6 +449,7 @@ td {
 
 #readMoreEye {
     font-size: 18px;
+    display: inline-block;
 }
 
 #readMoreEye:hover {
@@ -453,7 +463,7 @@ td {
 
 .page-404__icon {
     background: url("/views/termometr.png");
-        display: inline-block;
+    display: inline-block;
     width: 8.5rem;
     height: 8.5rem;
     vertical-align: bottom;
@@ -466,11 +476,12 @@ td {
     color: white;
     opacity: 0.7;
 }
-.page-404__btn:hover{
+
+.page-404__btn:hover {
     color: white;
     opacity: 1;
     box-shadow: 0 0 0 0 #40335f;
-        transition-duration: 0.2s;
+    transition-duration: 0.2s;
 }
 
 .btn--violent {
@@ -481,4 +492,21 @@ td {
 
 .btn-pr {
     background-color: #40335f;
+}
+
+#forPass {
+    margin-top: -5px;
+}
+
+#forTimer {
+    color: #a94442;
+}
+
+#printPassword {
+    display: none;
+    margin-left: 15px;
+}
+
+#butPassAndPrint {
+    display: flex;
 }

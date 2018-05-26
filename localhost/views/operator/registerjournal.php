@@ -38,7 +38,7 @@
                     <ul class="nav menu-second-level collapse" id="demo<?php echo $index; ?>">
                         <?php foreach ($officces as $inner_key => $innerVal): ?>
                         <?php if ($innerVal['id_special'] == $currentId): ?>
-                        <li class="doctor-pills-name" data-id="<?php echo $innerVal['id_pacient']; ?>" onclick="ShowDoctorSchedule(this)">
+                        <li class="doctor-pills-name" data-id="<?php echo $innerVal['id_pacient']; ?>">
                             <a>
                                 <?php echo $innerVal['name']." ".$innerVal['surname']." ".$innerVal['patronymic']; ?>&nbsp;
                                 <i data-id="<?php echo $innerVal['id_pacient']; ?>" class="fa fa-eye" id="readMoreEye" onclick="ViewСertainDoctorSchedule(this)" data-toggle="tooltip" title="" data-original-title="Подробнее" style="font-size:18px;"></i>
@@ -57,6 +57,7 @@
         <div class="col-md-9 doctor-schedule-content">
             <form class="form" method="post">
                 <div class="form-group row">
+                    <label class="">Записи</label>
                     <table class="table table-striped table-hover table-bordered doctor-schedule-table" id="doctor-schedule-table">
                         <thead>
                             <tr>
