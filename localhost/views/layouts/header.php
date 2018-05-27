@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/templates/css/bootstrap-datetimepicker.min.css" />
     <link href="/templates/css/bootstrap.css" rel="stylesheet">
+    <link href="/templates/css/loading.css" rel="stylesheet">
     <link href="/templates/css/style.css" rel="stylesheet">
     <script src="/templates/js/jquery.js"></script>
     <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">

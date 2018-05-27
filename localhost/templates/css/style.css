@@ -463,7 +463,7 @@ td {
 .alert-div {
     position: fixed;
     bottom: 0;
-    top: 96px;
+    top: 150px;
     right: 20px;
     z-index: 999;
 }

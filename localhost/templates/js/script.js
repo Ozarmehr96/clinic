@@ -479,75 +479,79 @@ var selectedPatient;
 
 function ShowUserDatasOnModal(elem) {
     ActivateFirstLiOfPatientModal();
-    $("#forPass").empty();
-    $("#forTimer").empty();
-    clearTimeout(timer);
-    // $("#id_doctor option:first").attr("selected", "selected");
-    $("#remove-patient-button").css("display", "inline-block");
-    $("#printPassword").css("display", "none");
-    var get_pacient_data_id_from_table = "";
-    var visibleZapisatButton = "";
-    get_pacient_data_id_from_table = $(elem).data("id");
-    selectedPatient = get_pacient_data_id_from_table;
-    $("#remove-patient-button").data("id", get_pacient_data_id_from_table);
-    patient_id_from_search = get_pacient_data_id_from_table;
-    visibleZapisatButton = $(elem).data("zapicat");
-    if (visibleZapisatButton == true) {
-        $("#zapicat").css("display", "block");
-    }
-    ChangeFormActionByClassName(".selected-user-form", "/operator/update/patient/" + get_pacient_data_id_from_table);
-    $(".add-new-pacient").css("display", "none"); // блокируем кнопку добавить
-    $("#save-user-selected-info").css("display", "inline-block"); // показываем кнопки сохранить и изменить
-    $("#selectedPacientModalBox").modal('show');
-
-    //alert(get_pacient_data_id_from_table);
-    //$(".selected_PacientModalBoxTitle").text("Карточка пациента: " + $(className).text());
-
-    var fio = "";
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/operator/patients", true);
-    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var myObj = JSON.parse(this.responseText);
-
-            $("#selected-user-name").val(myObj.name); //Основные сведения
-            $("#selected-user-surname").val(myObj.surname);
-            $("#selected-user-patronymic").val(myObj.patronymic);
-            $("#selected-user-sex").val(myObj.sex);
-            $("#date_of_birth").val(myObj.date_of_birth);
-            $("#selected-user-phone").val(myObj.phone);
-            $("#selected-user-patient_card_num").val(myObj.patient_card_num);
-            $("#forLogin").text("Логин: " + myObj.patient_card_num);
-
-            $("#selected-user-invalidnost").val(myObj.invalidnost);
-            $("#selected-user-adress").val(myObj.adress);
-            $("#selected-user-ss").val(myObj.social_status);
-            $("#selected-pacientdoctor").val(myObj.id_doctor);
-            $("#fixing_date").val(myObj.fixing_date);
-
-            $("#selected-user-id_citizenship").val(myObj.id_citizenship); //Контакты
-            $("#selected-user-region").val(myObj.id_region);
-            $("#selected-user-email").val(myObj.email);
-
-            $("#selected-user-type_medical_policy").val(myObj.type_medical_policy); //Страховой полис
-            $("#datetimepicker-policy-start").val(myObj.start_medical_policy);
-            $("#selected-user-police_number").val(myObj.police_number);
-            $("#datetimepicker-policy-end").val(myObj.end_medical_policy);
-            $("#selected-user-comp").val(myObj.Id_insurance_company);
-            $("#selected-user-snils").val(myObj.snils);
-
-            $("#selected-user-university").val(myObj.id_university); //Документы
-            $("#selected-user-work").val(myObj.work_place);
-            $("#selected-user-passport").val(myObj.passport_num);
-            $("#selected-user-passportDateStart").val(myObj.data_vidachi_pass);
-            $("#selected-user-inn").val(myObj.inn);
-
-            fio = myObj.surname + " " + myObj.name + " " + myObj.patronymic;
-            $(".selected_PacientModalBoxTitle").text("Карточка пациента: " + fio);
+    LoadSpinner(function () {
+        $("#forPass").empty();
+        $("#forTimer").empty();
+        clearTimeout(timer);
+        // $("#id_doctor option:first").attr("selected", "selected");
+        $("#remove-patient-button").css("display", "inline-block");
+        $("#printPassword").css("display", "none");
+        var get_pacient_data_id_from_table = "";
+        var visibleZapisatButton = "";
+        get_pacient_data_id_from_table = $(elem).data("id");
+        selectedPatient = get_pacient_data_id_from_table;
+        $("#remove-patient-button").data("id", get_pacient_data_id_from_table);
+        patient_id_from_search = get_pacient_data_id_from_table;
+        visibleZapisatButton = $(elem).data("zapicat");
+        if (visibleZapisatButton == true) {
+            $("#zapicat").css("display", "block");
         }
-    };
-    xhttp.send("id=" + encodeURIComponent(get_pacient_data_id_from_table));
+        ChangeFormActionByClassName(".selected-user-form", "/operator/update/patient/" + get_pacient_data_id_from_table);
+        $(".add-new-pacient").css("display", "none"); // блокируем кнопку добавить
+        $("#save-user-selected-info").css("display", "inline-block"); // показываем кнопки сохранить и изменить
+
+        $("#selectedPacientModalBox").modal('show');
+
+        //alert(get_pacient_data_id_from_table);
+        //$(".selected_PacientModalBoxTitle").text("Карточка пациента: " + $(className).text());
+
+        var fio = "";
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/operator/patients", true);
+        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText);
+
+                $("#selected-user-name").val(myObj.name); //Основные сведения
+                $("#selected-user-surname").val(myObj.surname);
+                $("#selected-user-patronymic").val(myObj.patronymic);
+                $("#selected-user-sex").val(myObj.sex);
+                $("#date_of_birth").val(myObj.date_of_birth);
+                $("#selected-user-phone").val(myObj.phone);
+                $("#selected-user-patient_card_num").val(myObj.patient_card_num);
+                $("#forLogin").text("Логин: " + myObj.patient_card_num);
+
+                $("#selected-user-invalidnost").val(myObj.invalidnost);
+                $("#selected-user-adress").val(myObj.adress);
+                $("#selected-user-ss").val(myObj.social_status);
+                $("#selected-pacientdoctor").val(myObj.id_doctor);
+                $("#fixing_date").val(myObj.fixing_date);
+
+                $("#selected-user-id_citizenship").val(myObj.id_citizenship); //Контакты
+                $("#selected-user-region").val(myObj.id_region);
+                $("#selected-user-email").val(myObj.email);
+
+                $("#selected-user-type_medical_policy").val(myObj.type_medical_policy); //Страховой полис
+                $("#datetimepicker-policy-start").val(myObj.start_medical_policy);
+                $("#selected-user-police_number").val(myObj.police_number);
+                $("#datetimepicker-policy-end").val(myObj.end_medical_policy);
+                $("#selected-user-comp").val(myObj.Id_insurance_company);
+                $("#selected-user-snils").val(myObj.snils);
+
+                $("#selected-user-university").val(myObj.id_university); //Документы
+                $("#selected-user-work").val(myObj.work_place);
+                $("#selected-user-passport").val(myObj.passport_num);
+                $("#selected-user-passportDateStart").val(myObj.data_vidachi_pass);
+                $("#selected-user-inn").val(myObj.inn);
+
+                fio = myObj.surname + " " + myObj.name + " " + myObj.patronymic;
+                $(".selected_PacientModalBoxTitle").text("Карточка пациента: " + fio);
+            }
+        };
+        xhttp.send("id=" + encodeURIComponent(get_pacient_data_id_from_table));
+    }, 200);
+
     get_pacient_data_id_from_table = 0;
 }
 
@@ -589,69 +593,73 @@ function ShowPatientDatasOnModalForPatient(elem) {
     ActivateFirstLiOfPatientModal();
     var get_pacient_data_id_from_table = "";
     var visibleZapisatButton = "";
-    get_pacient_data_id_from_table = $(elem).data("id");
-    $("#remove-patient-button").data("id", get_pacient_data_id_from_table);
-    patient_id_from_search = get_pacient_data_id_from_table;
-    visibleZapisatButton = $(elem).data("zapicat");
-    if (visibleZapisatButton == true) {
-        $("#zapicat").css("display", "block");
-    }
-    var actionName = "/patient/update/" + get_pacient_data_id_from_table; //actionName.replace(/\s/g, '')
-    ChangeFormActionByClassName(".selected-user-form", actionName);
-    $(".add-new-pacient").remove(); // блокируем кнопку добавить
-    $("#remove-patient-button").remove(); // блокируем кнопку добавить
-    $("#save-user-selected-info").css("display", "inline-block"); // показываем кнопки сохранить и изменить
-    $("#selectedPacientModalBox").modal('show');
 
-    //alert(get_pacient_data_id_from_table);
-    //$(".selected_PacientModalBoxTitle").text("Карточка пациента: " + $(className).text());
-
-    var fio = "";
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/patient", true);
-    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var myObj = JSON.parse(this.responseText);
-
-            $("#selected-user-name").val(myObj.name); //Основные сведения
-            $("#selected-user-surname").val(myObj.surname);
-            $("#selected-user-patronymic").val(myObj.patronymic);
-            $("#selected-user-sex").val(myObj.sex);
-            $("#date_of_birth").val(myObj.date_of_birth);
-            $("#selected-user-phone").val(myObj.phone);
-            $("#selected-user-patient_card_num").val(myObj.patient_card_num);
-            $("#forLogin").text(myObj.patient_card_num);
-
-            $("#selected-user-invalidnost").val(myObj.invalidnost);
-            $("#selected-user-adress").val(myObj.adress);
-            $("#selected-user-ss").val(myObj.social_status);
-            $("#selected-pacientdoctor").val(myObj.id_doctor);
-            $("#fixing_date").val(myObj.fixing_date);
-
-            $("#selected-user-id_citizenship").val(myObj.id_citizenship); //Контакты
-            $("#selected-user-region").val(myObj.id_region);
-            $("#selected-user-email").val(myObj.email);
-
-            $("#selected-user-type_medical_policy").val(myObj.type_medical_policy); //Страховой полис
-            $("#datetimepicker-policy-start").val(myObj.start_medical_policy);
-            $("#selected-user-police_number").val(myObj.police_number);
-            $("#datetimepicker-policy-end").val(myObj.end_medical_policy);
-            $("#selected-user-comp").val(myObj.Id_insurance_company);
-            $("#selected-user-snils").val(myObj.snils);
-
-            $("#selected-user-university").val(myObj.id_university); //Документы
-            $("#selected-user-work").val(myObj.work_place);
-            $("#selected-user-passport").val(myObj.passport_num);
-            $("#selected-user-passportDateStart").val(myObj.data_vidachi_pass);
-            $("#selected-user-inn").val(myObj.inn);
-
-            fio = myObj.surname + " " + myObj.name + " " + myObj.patronymic;
-            $(".selected_PacientModalBoxTitle").text("Карточка пациента: " + fio);
-            console.log(myObj);
+    LoadSpinner(function () {
+        get_pacient_data_id_from_table = $(elem).data("id");
+        $("#remove-patient-button").data("id", get_pacient_data_id_from_table);
+        patient_id_from_search = get_pacient_data_id_from_table;
+        visibleZapisatButton = $(elem).data("zapicat");
+        if (visibleZapisatButton == true) {
+            $("#zapicat").css("display", "block");
         }
-    };
-    xhttp.send("id=" + encodeURIComponent(get_pacient_data_id_from_table));
+        var actionName = "/patient/update/" + get_pacient_data_id_from_table; //actionName.replace(/\s/g, '')
+        ChangeFormActionByClassName(".selected-user-form", actionName);
+        $(".add-new-pacient").remove(); // блокируем кнопку добавить
+        $("#remove-patient-button").remove(); // блокируем кнопку добавить
+        $("#save-user-selected-info").css("display", "inline-block"); // показываем кнопки сохранить и изменить
+        $("#selectedPacientModalBox").modal('show');
+
+        //alert(get_pacient_data_id_from_table);
+        //$(".selected_PacientModalBoxTitle").text("Карточка пациента: " + $(className).text());
+
+        var fio = "";
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/patient", true);
+        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var myObj = JSON.parse(this.responseText);
+
+                $("#selected-user-name").val(myObj.name); //Основные сведения
+                $("#selected-user-surname").val(myObj.surname);
+                $("#selected-user-patronymic").val(myObj.patronymic);
+                $("#selected-user-sex").val(myObj.sex);
+                $("#date_of_birth").val(myObj.date_of_birth);
+                $("#selected-user-phone").val(myObj.phone);
+                $("#selected-user-patient_card_num").val(myObj.patient_card_num);
+                $("#forLogin").text(myObj.patient_card_num);
+
+                $("#selected-user-invalidnost").val(myObj.invalidnost);
+                $("#selected-user-adress").val(myObj.adress);
+                $("#selected-user-ss").val(myObj.social_status);
+                $("#selected-pacientdoctor").val(myObj.id_doctor);
+                $("#fixing_date").val(myObj.fixing_date);
+
+                $("#selected-user-id_citizenship").val(myObj.id_citizenship); //Контакты
+                $("#selected-user-region").val(myObj.id_region);
+                $("#selected-user-email").val(myObj.email);
+
+                $("#selected-user-type_medical_policy").val(myObj.type_medical_policy); //Страховой полис
+                $("#datetimepicker-policy-start").val(myObj.start_medical_policy);
+                $("#selected-user-police_number").val(myObj.police_number);
+                $("#datetimepicker-policy-end").val(myObj.end_medical_policy);
+                $("#selected-user-comp").val(myObj.Id_insurance_company);
+                $("#selected-user-snils").val(myObj.snils);
+
+                $("#selected-user-university").val(myObj.id_university); //Документы
+                $("#selected-user-work").val(myObj.work_place);
+                $("#selected-user-passport").val(myObj.passport_num);
+                $("#selected-user-passportDateStart").val(myObj.data_vidachi_pass);
+                $("#selected-user-inn").val(myObj.inn);
+
+                fio = myObj.surname + " " + myObj.name + " " + myObj.patronymic;
+                $(".selected_PacientModalBoxTitle").text("Карточка пациента: " + fio);
+
+            }
+        };
+        xhttp.send("id=" + encodeURIComponent(get_pacient_data_id_from_table));
+    }, 200);
+
     get_pacient_data_id_from_table = 0;
 }
 
@@ -953,11 +961,12 @@ function ShowDoctorSchedule(elem) {
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 var receivedArr = this.responseText;
-                $('#doctor-schedule-table tbody').append(receivedArr);
+                LoadSpinner(function () {
+                    $('#doctor-schedule-table tbody').append(receivedArr);
+                }, 200);
             }
         };
         xhttp.send("scheduleSubmit=1&date=" + encodeURIComponent(date) + "&id_doctor=" + encodeURIComponent(doctorID));
-
     }
 
 }
@@ -1418,7 +1427,10 @@ function ViewСertainDoctorSchedule(elem) {
         }
     };
     xhttp.send("doctorView=true&id=" + encodeURIComponent(doctorID));
-    $("#doctorScheduleModalBox").modal('show');
+    // $(".loading").css("display", "block");
+    LoadSpinner(function () {
+        $("#doctorScheduleModalBox").modal('show');
+    }, 200);
 }
 
 function AlertDoctorIsNotWork() {
@@ -1436,3 +1448,10 @@ function AlertDoctorIsNotWork() {
 } else {
     $_SESSION['timestamp'] = time(); //set new timestamp
 }*/
+function LoadSpinner(callback, seconds) {
+    $(".loading").css("display", "block");
+    setTimeout(function () {
+        $(".loading").css("display", "none");
+        callback();
+    }, seconds);
+}
