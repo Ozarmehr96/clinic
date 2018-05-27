@@ -1058,6 +1058,7 @@ var scheduleIDForUpdate = "";
 var patientForUpdateRecordID;
 
 function UpdateRecordedPatient(elem) {
+    $("#updaterecordPacientModalTitle").text('Редактирование записи');
     $("#updaterecordPacientAppointmentModalBox").modal('show');
     var patientID = $(elem).data("patient_id");
     patientForUpdateRecordID = patientID;
