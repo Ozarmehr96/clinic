@@ -42,7 +42,7 @@
                         </li>
                         <li class="HistoryLi" onclick="ShowDoctorsWorkSchedule()">
                             <a href="#">
-                                <i class="fa fa-history" style="font-size: 18px;"></i> История посещения </a>
+                                <i class="glyphicon glyphicon-time" style="font-size: 18px;"></i> История посещения </a>
                         </li>
                     </ul>
                 </div>
@@ -54,7 +54,7 @@
                 <div class="records-table">
                     <div class="inline-headers">
                         <h3 style="display: inline-flex;">Записи</h3>
-                        <h3 id="refreshIcon" style="" data-toggle="tooltip" title="" data-original-title="Обновить"><i class="fa fa-refresh pull-right" onclick="GetRecordList()"></i></h3>
+                        <h3 id="refreshIcon" style="" data-toggle="tooltip" title="" data-original-title="Обновить"><i class="glyphicon glyphicon-refresh pull-right" onclick="GetRecordList()"></i></h3>
                     </div>
                     <table class="table table-striped table-bordered add-overflow-x">
                         <thead>

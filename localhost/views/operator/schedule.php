@@ -4,7 +4,7 @@
     <h4>Предварительная запись на прием</h4>
     <form class="form" method="post">
         <div class="form-group row">
-            <table class="table table-striped table-hover table-bordered pacient-schedule-table">
+            <table class="table table-striped table-hover table-bordered pacient-schedule-table " id="recorderPatientsschedule">
                 <thead>
                     <tr>
                         <th>№</th>

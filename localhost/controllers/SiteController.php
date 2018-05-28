@@ -14,6 +14,8 @@
 class SiteController extends Redirect {
     
     public function __construct() {
+        /*$pass = password_hash("124567", PASSWORD_DEFAULT);
+        echo $pass;*/
         if (isset($_SESSION['user_type']))
         {
             parent::CheckUsertypeAndRedirect($_SESSION['user_type']);
@@ -32,27 +34,21 @@ class SiteController extends Redirect {
            $login = $_POST['login'];
            $password = $_POST['password'];
            
-            $user = array();
-            $user = Site::getUser($login, $password);
-            $result = $user['count(*)'];
-            if ($result == 1)
+            $users = array();
+            $users = Site::getUser($login);
+            
+            foreach ($users as $user)
             {
-                 parent::SetSessionAndRedirect($user['id_pacient'], $user['type']);
+                if (password_verify($password, $user['password']) && $user['login'] == $login || $user['patient_card_num'] == $login)
+                {
+                     parent::SetSessionAndRedirect($user['id_pacient'], $user['type']);
+                     break;
+                }
+                else {
+                     $isExistUSer = false;
+                }
             }
-            else {
-                 $isExistUSer = false;
-            }
-        }
-        if (isset($_POST['authorization']))
-        {
-            $login = $_POST['login'];
-            $password = $_POST['password'];
-           
-            $user = array();
-            $user = Site::getUser($login, $password);
-            $result = $user['count(*)'];
-            echo $result;
-            exit();
+            
         }
         require_once ROOT.'/views/index/index.php';
         return TRUE;
@@ -65,10 +61,17 @@ class SiteController extends Redirect {
             $login = $_POST['login'];
             $password = $_POST['password'];
            
-            $user = array();
-            $user = Site::getUser($login, $password);
-            $result = $user['count(*)'];
-            echo $result;
+            $users = array();
+            $users = Site::getUser($login);
+            $count = 0;
+            foreach ($users as $user)
+            {
+                if (password_verify($password, $user['password']) && $user['login'] == $login || $user['patient_card_num'] == $login)
+                {
+                     echo "1";
+                     break;
+                }
+            }
             exit();
         }
     }

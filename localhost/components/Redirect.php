@@ -24,8 +24,10 @@ class Redirect {
     public function __construct($user_type) {
         $userId = "";
         $url = "";
+        $this->AutoExitIfUserNoactive(600);
         if (isset($_SESSION['user_id']))
         {
+            
             $userId = $_SESSION['user_id'];
             $getUser = Patient::getPatientByID($userId);
             $result = $getUser['count(*)'];
@@ -67,6 +69,7 @@ class Redirect {
     {
        
        session_unset();
+       $_SESSION['timestamp'] = time();
        $_SESSION['user_id'] = $user_id;
        $_SESSION['user_type'] = $user_type;
        $this->CheckUsertypeAndRedirect($_SESSION['user_type']);
@@ -96,5 +99,23 @@ class Redirect {
         $userID = "";
         if (isset($_SESSION['user_id'])) $userID = $_SESSION['user_id'];
         return $userID;   
+    }
+    
+    /**
+     * Автовыход после 600 сек... без действия 
+     * @param type $seconds
+     */
+    public static function AutoExitIfUserNoactive($seconds)
+    {
+        if (isset($_SESSION['timestamp'])) {
+            if (time() - $_SESSION['timestamp'] > $seconds) { //subtract new timestamp from the old one
+                unset($_SESSION['user_id'], $_SESSION['user_type']);
+                $_SESSION['user_id'] = false;
+                header("Location: /" ); //redirect to index.php
+                exit;
+            } else {
+                $_SESSION['timestamp'] = time(); //set new timestamp
+            }
+        }
     }
 }

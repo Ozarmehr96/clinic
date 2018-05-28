@@ -535,3 +535,7 @@ td {
 #patient_historty_visitA {
     padding-left: 10px;
 }
+
+#recorderPatientsschedule {
+    display: none;
+}

@@ -11,6 +11,7 @@ return array(
     'heads-doctor'  =>  'headsDoctor/index',
     'heads-doctor/searchDoctor'  =>  'headsDoctor/gets',
     'operator'  =>  'operator/index',
+    'action'  =>  'operator/action',
     'operator/schedule'  =>  'operator/index',
     //'operator/get/pacietn/by/id/([0-9]+)'  =>  'operator/GetUserById/$1',
     'operator/register-journal'  =>  'operator/registerJournal',

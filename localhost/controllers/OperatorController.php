@@ -168,14 +168,18 @@ class OperatorController extends Redirect {
         {
             $patientID = $_POST['userid'];
             $generText = "";
+            $password = "";
             $result = "";
             do{
-                $generText = Settings::generatePassword();
-                $result = Operator::CheckIsExistsPasswd($generText);
+                $password = Settings::generatePassword();
+                $generText = password_hash($password, PASSWORD_DEFAULT);
+                $result = Operator::CheckIsExistsPasswd($password);
             }
             while ($result !=0);
-            $insertRes = Operator::UpdateUserPass($generText,$patientID);
-            echo $generText;
+            $hashed_password = password_hash($generText, PASSWORD_DEFAULT);
+            $insertRes = Operator::UpdateUserPass($hashed_password,$patientID);
+            
+            echo $password;
             exit();
         }
         if(isset($_POST['getMaxPatientId']))
@@ -583,7 +587,7 @@ exit();
      * Возвращает ФИО пациента с помощью ID
      * @param type $id_patiet
      */
-    public function getPatientFIOBbyId($id_patiet)
+    public static function getPatientFIOBbyId($id_patiet)
     {
         $patientDatas = array();
         $patientDatas= Patient::getPatientByID($id_patiet);

@@ -23,7 +23,10 @@ function GetPatientRecord() {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var myObj = this.responseText;
-            $("#recordList").append(myObj);
+            LoadSpinner(function () {
+                $("#recordList").append(myObj);
+            }, 500);
+
         }
     };
     xhttp.send("getRecords=1");

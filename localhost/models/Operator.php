@@ -488,7 +488,7 @@ class Operator {
         }
     }
     
-    public function getScheduleByID($schedule_id)
+    public static function getScheduleByID($schedule_id)
     {
         $connection = Db::getConnection();
         $sql = "SELECT * FROM schedule JOIN doctor ON schedule.id_doctor = doctor.id_doctor "

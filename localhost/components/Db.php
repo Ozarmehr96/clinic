@@ -19,7 +19,7 @@ class Db {
     public static function getConnection()
     {
         $paramsFile = ROOT.'/config/db_params.php';
-        $params = include ($paramsFile);
+        $params = include ($paramsFile); 
         
         try 
         {

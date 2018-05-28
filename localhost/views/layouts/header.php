@@ -12,6 +12,9 @@
     <title>Регистратор</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/templates/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="/templates/fonts/material-icons.css">
+    <link rel="stylesheet" href="/templates/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/templates/css/bootstrap-datetimepicker.min.css" />

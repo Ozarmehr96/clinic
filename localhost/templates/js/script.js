@@ -2,6 +2,9 @@ $(document).ready(function () {
     $('#doctors').change(function () {
         $('#updatenachaloPriema option:last').insertBefore('#updatenachaloPriema option:first');
     });
+    LoadSpinner(function () {
+        $("#recorderPatientsschedule").css("display", "block");
+    }, 1200);
     //функция начало календаря
     $(function () {
         $('#datetimepicker1').datetimepicker({
@@ -70,74 +73,6 @@ $(document).ready(function () {
         $("#updaterecordPacientAppointmentModalBox").css("overflow-y", "scroll");
         $("body").css("overflow-y", "hidden");
     });
-    /*$(function () {
-    			$('#datetimepicker33').datetimepicker({
-    				locale: 'ru',
-    				stepping: 10,
-    				format: 'DD-MM-YYYY',
-    				//defaultDate: moment().toDate(),
-    				//daysOfWeekDisabled: [0]
-    			});
-    		});
-    		$(function () {
-    			$('#datetimepicker2').datetimepicker({
-    				locale: 'ru',
-    				stepping: 10,
-    				format: 'DD-MM-YYYY',
-    				minDate: moment().toDate(),
-
-    				//defaultDate: moment().toDate(),
-    				//daysOfWeekDisabled: [0]
-    			});
-    		});
-    		$(function () { //дата приема
-    			$('#dataPriema').datetimepicker({
-    				locale: 'ru',
-    				stepping: 10,
-    				format: 'DD-MM-YYYY',
-    				//defaultDate: moment().toDate(),
-    				minDate: moment().toDate(),
-    				//daysOfWeekDisabled: [0]
-    			});
-    		});
-    		$(function () { //начало приема
-    			$('#nachaloPriema').datetimepicker({
-    				locale: 'ru',
-    				stepping: 15,
-    				format: 'HH:mm'
-    			});
-    		});
-    		$(function () { //дата приема
-    			$('#updatedatetimepickerZapicDataPriema').datetimepicker({
-    				locale: 'ru',
-    				stepping: 10,
-    				format: 'DD-MM-YYYY',
-    				defaultDate: new Date('2000, 09, 09'),
-    				maxDate: moment().toDate(),
-    			});
-    		});
-
-    		$(function () { //дата приема
-    			$('#datetimepicker_for_doctor_get').datetimepicker({
-    				locale: 'ru',
-    				stepping: 10,
-    				format: 'DD-MM-YYYY',
-    				//defaultDate: moment().toDate(),
-    				minDate: moment().toDate(),
-    				daysOfWeekDisabled: [0]
-    			});
-    		});
-
-
-    		// открыть блок календарь при нажатии на поле
-    		$('#datetimepicker2 input').click(function (event) {
-    			$('#datetimepicker2 ').data("DateTimePicker").show();
-    		});
-
-	
-    		/*$('#fixing_date').click(function (event) {
-    			$('#fixing_date').data("DateTimePicker").show();
-    		})*/
 
     // --------------------------------------------Конец календаря-------------------------------------------------------------------
     $(function () { //дата приема
@@ -252,7 +187,9 @@ $(document).ready(function () {
  */
 $("#loginForm").submit(function (e) {
     var result = Authorization();
-    if (result > 1 || result == 0) {
+    $("body").append('<div class="loading">Loading&#8230;</div>');
+
+    if (result != 1) {
         OpenWarningModal("Ошибка", "Неправильный пароль или логин");
         return false;
     }
@@ -273,6 +210,7 @@ var Authorization = function () {
         //data: {'b': val }, // Можно вот так указать, только внутри фигурных скобках!!!
         data: 'authorization=true&login=' + login + '&password=' + pass, // Можно еще вот так, без фигурных скобок
         success: function (result) {
+
             rowCount = result;
         }
     });
@@ -568,7 +506,6 @@ function CreatePass() {
             var result = this.responseText;
             $("#forPass").text("Пароль: " + result);
             Timer(120, "#forTimer");
-
         }
     };
     xhttp.send("createpass=true&userid=" + encodeURIComponent(selectedPatient));
@@ -578,6 +515,7 @@ var timer = "";
 function Timer(seconds, inputIdORClass) {
     $(inputIdORClass).text("Пароль исчезнет через " + seconds + " сек...");
     $("#printPassword").css("display", "block");
+    $("#recoverPassword").prop('disabled', true);
     seconds--;
     timer = setTimeout('Timer(' + seconds + ',"' + inputIdORClass + '")', 1000);
     if (seconds < -1) {
@@ -585,6 +523,7 @@ function Timer(seconds, inputIdORClass) {
         $(inputIdORClass).empty();
         $("#forPass").empty();
         $("#printPassword").css("display", "none");
+        $("#recoverPassword").prop('disabled', true);
     }
 }
 
@@ -1260,10 +1199,7 @@ function GetScheduleByIdAndPast(id_shedule, doctorID) {
     xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            //var myObj = this.responseText;
-            //alert(myObj);
             var myObj = JSON.parse(this.responseText);
-            console.log(myObj);
             $("#updatedatetimepickerZapicDataPriema").val(myObj.date_priema);
             oldDateOfPriema = new Date(myObj.date_priema);
             $("#specialities").val(myObj.id_special);
